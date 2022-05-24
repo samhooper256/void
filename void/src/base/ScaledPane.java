@@ -2,7 +2,7 @@ package base;
 
 import java.util.Collections;
 
-import game.GamePane;
+import game.*;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.layout.*;
@@ -44,6 +44,7 @@ public final class ScaledPane extends Pane implements UpdatablePane {
 	
 	public void showGame() {
 		setChildren(GamePane.get());
+		GamePane.get().setupSave(new Save()); //TODO move this elsewhere.
 	}
 
 	private void setChildren(Node... children) {

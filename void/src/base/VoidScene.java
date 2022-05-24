@@ -15,6 +15,7 @@ public final class VoidScene extends Scene implements Updatable {
 	
 	private VoidScene() {
 		super(Root.get(), WIDTH * .5, HEIGHT * .5);
+		getStylesheets().add(Main.class.getResource(Main.RESOURCES_PREFIX + "style.css").toExternalForm());
 	}
 
 	@Override

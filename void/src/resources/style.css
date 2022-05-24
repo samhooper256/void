@@ -1,0 +1,7 @@
+@font-face {
+	src: url("fonts/CrimsonPro-VariableFont_wght.ttf"); /* Crimson Pro ExtraLight */
+}
+
+.mu {
+	-fx-font: 72 "Crimson Pro ExtraLight";
+}

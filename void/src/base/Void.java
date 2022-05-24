@@ -20,11 +20,16 @@ public final class Void extends Application {
 		stage.setTitle(TITLE);
 		ScaledPane.get().showGame();
 		stage.show();
+		Timer.get().start();
 	}
 
 	/** Returns {@code null} if {@link #start(Stage)} has not been called. */
 	public static Stage stage() {
 		return stage;
+	}
+	
+	static void update(long diff) {
+		VoidScene.get().update(diff);
 	}
 	
 }

@@ -6,14 +6,6 @@ import java.util.Arrays;
 import utils.BigNumbers;
 
 final class Formatter {
-
-	public static void main(String[] args) {
-		System.out.println(format(new BigInteger("0")));
-		for(int i = 1; i < 50; i++) {
-			System.out.println(format(new BigInteger("1" + "0".repeat(i - 1))));
-			System.out.println(format(new BigInteger("9".repeat(i))));
-		}
-	}
 	
 	private static final int SIGNIFICANT_DIGITS_SHOWN = 4;
 	private static final String RADIX_POINT = ".", EXPONENT_INDICATOR = "e";

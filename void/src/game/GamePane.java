@@ -1,12 +1,12 @@
 package game;
 
-import base.VoidScene;
+import base.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import utils.fx.Nodes;
 
-public final class GamePane extends Pane {
+public final class GamePane extends Pane implements UpdatablePane {
 
 	private static final GamePane INSTANCE = new GamePane();
 	

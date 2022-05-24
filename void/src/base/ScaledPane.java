@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
 import utils.fx.*;
 
-public final class ScaledPane extends Pane {
+public final class ScaledPane extends Pane implements UpdatablePane {
 
 	private static final ScaledPane INSTANCE = new ScaledPane();
 	

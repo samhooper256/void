@@ -3,17 +3,6 @@ package utils;
 import java.math.BigInteger;
 
 public class BigNumbers {
-
-	public static void main(String[] args) {
-		System.out.println(BigInteger.ZERO.bitLength());
-		System.out.println(BigInteger.ONE.bitLength());
-		
-		System.out.println();
-		
-		System.out.println(digitCount(BigInteger.ZERO));
-		System.out.println(digitCount(BigInteger.valueOf(-1)));
-		System.out.println(digitCount(BigInteger.valueOf(-1000)));
-	}
 	
 	public static int digitCount(BigInteger bi) {
 		if(isZero(bi))

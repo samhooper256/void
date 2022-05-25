@@ -1,6 +1,7 @@
 package base;
 
 import javafx.application.Application;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public final class Void extends Application {
@@ -20,6 +21,10 @@ public final class Void extends Application {
 		stage.setTitle(TITLE);
 		ScaledPane.get().showGame();
 		stage.show();
+		stage.addEventFilter(KeyEvent.ANY, ke -> {
+			VoidScene.get().handle(ke);
+			ke.consume();
+		});
 		Timer.get().start();
 	}
 

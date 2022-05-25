@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import utils.fx.Backgrounds;
 
 /** The {@link Scene#getRoot() root} of the {@link VoidScene}. */
-final class Root extends Pane implements UpdatablePane {
+final class Root extends Pane implements UpdatablePane, KeyListenerPane {
 
 	private static final Root INSTANCE = new Root();
 	

@@ -26,11 +26,8 @@ final class GameLayer extends Pane implements UpdatablePane {
 	private GameLayer() {
 		Nodes.setPrefSize(this, VoidScene.WIDTH, VoidScene.HEIGHT);
 		addEventHandler(MouseEvent.MOUSE_CLICKED, me -> {
-			if(me.getButton() == MouseButton.PRIMARY) {
-				Projectile ball = new Projectile(BigInteger.ONE);
-				ball.setCenter(me.getX(), me.getY());
-				getChildren().add(ball);
-			}
+			if(me.getButton() == MouseButton.PRIMARY)
+				addProjectile(new Projectile(BigInteger.ONE), me.getX(), me.getY());
 		});
 		mu = new Label();
 		mu.getStyleClass().add("mu");
@@ -38,6 +35,18 @@ final class GameLayer extends Pane implements UpdatablePane {
 		eouRemoves = new ArrayList<>();
 	}
 	
+	/** Assumes the given {@link Projectile} has already been positioned properly. */
+	void addProjectile(Projectile projectile) {
+		getChildren().add(projectile);
+	}
+	
+	/** Identical to {@link #addProjectile(Projectile)}, except it
+	 * {@link Projectile#setCenter(double, double) sets the center} of the given {@link Projectile} first. */
+	void addProjectile(Projectile projectile, double centerX, double centerY) {
+		projectile.setCenter(centerX, centerY);
+		addProjectile(projectile);
+	}
+
 	@Override
 	public void update(long diff) {
 		UpdatablePane.super.update(diff);

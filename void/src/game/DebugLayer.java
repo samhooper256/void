@@ -21,7 +21,7 @@ final class DebugLayer extends Pane implements KeyListenerPane {
 
 	/** Allows the {@link DebugLayer} to inspect the given {@link MouseEvent}, which is targetted for the
 	 * {@link GameLayer}, and possibly consume it. */
-	void inspectEvent(MouseEvent me) {
+	void inspectEventTargettedToGameLayer(MouseEvent me) {
 		if(DebugMenu.get().isVisible() && me.getButton() == MouseButton.PRIMARY) {
 			DebugMenu.get().setVisible(false);
 			me.consume();

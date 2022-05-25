@@ -9,6 +9,8 @@ import javafx.scene.layout.Pane;
  * items that can be made to appear through the item. The traversal methods and {@link #tree()}
  * traverse (list) items in no particular order. */
 interface DebugItem {
+	
+	String CSS = "debug-item";
 
 	default Pane asPane() {
 		return (Pane) this;

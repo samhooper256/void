@@ -1,5 +1,6 @@
 package game;
 
+import java.math.BigInteger;
 import java.util.function.Consumer;
 
 import base.*;
@@ -18,7 +19,7 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 		
 		DebugVBox(DebugItem... items) {
 			setMinWidth(MIN_WIDTH);
-			getStyleClass().add(CSS);
+			getStyleClass().addAll(CSS, DebugItem.CSS);
 			setFillWidth(true);
 			for(DebugItem item : items)
 				getChildren().add(item.asPane());
@@ -43,7 +44,7 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 			HBox.setHgrow(labelWrap, Priority.ALWAYS);
 			setMinHeight(HEIGHT);
 			getChildren().addAll(labelWrap);
-			getStyleClass().add(CSS);
+			getStyleClass().addAll(CSS, DebugItem.CSS);
 		}
 		
 	}
@@ -52,6 +53,7 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 
 		LeafItem(String text) {
 			super(text);
+			addEventHandler(MouseEvent.MOUSE_ENTERED, me -> DebugMenu.get().hideChildrenOfTop());
 		}
 
 		@Override
@@ -70,6 +72,7 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 			this.child = child;
 			getChildren().add(new ResizableImage(Images.DEBUG_RIGHT_ARROW));
 			addEventHandler(MouseEvent.MOUSE_ENTERED, me -> {
+				DebugMenu.get().hideChildrenOfTop();
 				Pane p = child.asPane();
 				Nodes.setLayout(p, getLayoutX() + getWidth(), getLayoutY());
 				p.setVisible(true);
@@ -91,15 +94,32 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 	
 	private abstract static sealed class CustomDebugItem extends Pane implements DebugItem {
 		
+		CustomDebugItem() {
+			getStyleClass().add(CSS);
+		}
+		
 	}
 	
 	private static final class SpawnProjectile extends CustomDebugItem implements KeyListener {
 		
-		final TextField field;
+		private static final double FIELD_WIDTH = 80;
+		private static final String HBOX_CSS = "spawn-projectile-hbox";
+		
+		final HBox hBox;
+		final Label muLabel;
+		final ExplicitNumberField field;
+		final Button spawnButton;
 		
 		SpawnProjectile() {
-			field = new TextField();
-			getChildren().add(field);
+			muLabel = new Label("MU:");
+			field = new ExplicitNumberField();
+			field.setMaxWidth(FIELD_WIDTH);
+			spawnButton = new Button("Spawn");
+			spawnButton.setOnAction(ae -> spawnAction());
+			hBox = new HBox(muLabel, field, spawnButton);
+			hBox.getStyleClass().add(HBOX_CSS);
+			hBox.setMinHeight(SimpleDebugItem.HEIGHT);
+			getChildren().add(hBox);
 		}
 
 		@Override
@@ -109,10 +129,13 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 
 		@Override
 		public void handle(KeyEvent event) {
-			if(event.getEventType() == KeyEvent.KEY_PRESSED) {
-				field.setText(field.getText() + event.getText());
-				field.positionCaret(field.getText().length());
-			}
+			field.handle(event);
+		}
+		
+		private void spawnAction() {
+			DebugMenu.get().setVisible(false);
+			MouseEvent me = DebugMenu.get().cause;
+			GameLayer.get().addProjectile(new Projectile(new BigInteger(field.getText())), me.getX(), me.getY());
 		}
 		
 	}
@@ -125,10 +148,11 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 	}
 
 	private final DebugVBox topItem;
+	/** The most recent {@link MouseEvent} that caused the {@link DebugMenu} to be displayed. */
+	private MouseEvent cause;
 	
 	private DebugMenu() {
-		topItem = new DebugVBox(new LeafItem("Bots"), new LeafItem("Longer Bots"),
-				new ParentItem("Spawn Projectile", new SpawnProjectile()));
+		topItem = new DebugVBox(new ParentItem("Spawn Projectile", new SpawnProjectile()), new LeafItem("Leaf"));
 		getStyleClass().add(CSS);
 		getChildren().addAll(topItem.tree());
 		setVisible(false);
@@ -137,8 +161,13 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 	/** Assumes this is a correct {@link MouseEvent} (i.e. a right click). */
 	void display(MouseEvent me) {
 		Nodes.setLayout(this, me.getX(), me.getY());
-		topItem.traverseChildren(di -> di.asPane().setVisible(false));
+		this.cause = me;
+		hideChildrenOfTop();
 		setVisible(true);
+	}
+
+	private void hideChildrenOfTop() {
+		topItem.traverseChildren(di -> di.asPane().setVisible(false));
 	}
 	
 }

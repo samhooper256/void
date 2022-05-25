@@ -1,12 +1,16 @@
 package base;
 
+import java.util.EnumSet;
+
 import javafx.application.Application;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
 import javafx.stage.Stage;
 
 public final class Void extends Application {
 
 	public static final String TITLE = "void";
+	
+	private static final EnumSet<KeyCode> KEYS_DOWN = EnumSet.noneOf(KeyCode.class);
 	
 	private static Stage stage;
 
@@ -22,6 +26,10 @@ public final class Void extends Application {
 		ScaledPane.get().showGame();
 		stage.show();
 		stage.addEventFilter(KeyEvent.ANY, ke -> {
+			if(ke.getEventType() == KeyEvent.KEY_PRESSED)
+				KEYS_DOWN.add(ke.getCode());
+			else if(ke.getEventType() == KeyEvent.KEY_RELEASED)
+				KEYS_DOWN.remove(ke.getCode());
 			VoidScene.get().handle(ke);
 			ke.consume();
 		});
@@ -35,6 +43,10 @@ public final class Void extends Application {
 	
 	static void update(long diff) {
 		VoidScene.get().update(diff);
+	}
+
+	public static boolean isDown(KeyCode code) {
+		return KEYS_DOWN.contains(code);
 	}
 	
 }

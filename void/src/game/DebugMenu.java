@@ -129,7 +129,10 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 
 		@Override
 		public void handle(KeyEvent event) {
-			field.handle(event);
+			if(event.getCode() == KeyCode.ENTER)
+				spawnAction();
+			else
+				field.handle(event);
 		}
 		
 		private void spawnAction() {

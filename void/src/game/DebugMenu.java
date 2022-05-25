@@ -1,6 +1,5 @@
 package game;
 
-import java.math.BigInteger;
 import java.util.function.Consumer;
 
 import base.*;
@@ -8,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import utils.Parsing;
 import utils.fx.*;
 
 final class DebugMenu extends Pane implements KeyListenerPane {
@@ -107,12 +107,12 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 		
 		final HBox hBox;
 		final Label muLabel;
-		final ExplicitNumberField field;
+		final ExplicitIntegerField field;
 		final Button spawnButton;
 		
 		SpawnProjectile() {
 			muLabel = new Label("MU:");
-			field = new ExplicitNumberField();
+			field = new ExplicitIntegerField();
 			field.setMaxWidth(FIELD_WIDTH);
 			spawnButton = new Button("Spawn");
 			spawnButton.setOnAction(ae -> spawnAction());
@@ -133,9 +133,12 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 		}
 		
 		private void spawnAction() {
-			DebugMenu.get().setVisible(false);
-			MouseEvent me = DebugMenu.get().cause;
-			GameLayer.get().addProjectile(new Projectile(new BigInteger(field.getText())), me.getX(), me.getY());
+			String text = field.getText();
+			if(Parsing.isInteger(text)) {
+				DebugMenu.get().setVisible(false);
+				MouseEvent me = DebugMenu.get().cause;
+				GameLayer.get().addProjectile(new Projectile(Parsing.parseInteger(text)), me.getX(), me.getY());
+			}
 		}
 		
 	}

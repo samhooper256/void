@@ -1,5 +1,7 @@
 package base;
 
+import java.util.Set;
+
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
 
@@ -7,15 +9,18 @@ import javafx.scene.input.*;
  * also allows events to be explicitly passed via {@link #handle(KeyEvent)}. The {@link #handle(KeyEvent)} method
  * only allows digits (0-9) to be entered. </p>
  * <p>This class is not in the {@code utils.fx} package because it relies on {@link Void}.</p>*/
-public class ExplicitNumberField extends TextField implements KeyListener {
+public class ExplicitIntegerField extends TextField implements KeyListener {
 
+	private static final Set<String> LEGAL_KEY_TEXTS =
+			Set.of("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "e", "E");
+	
 	//Optional TODO - make this support more features (e.g. selecting text, Ctrl+A, Home and End keys, Ctrl+V, etc.)
 	@Override
 	public void handle(KeyEvent event) {
 		if(event.getEventType() == KeyEvent.KEY_PRESSED) {
 			final String key = event.getText(), text = getText();
 			final int cpos = getCaretPosition();
-			if(key.length() == 1 && '0' <= key.charAt(0) && key.charAt(0) <= '9') {
+			if(key.length() == 1 && LEGAL_KEY_TEXTS.contains(key)) {
 				setText(text + key);
 				positionCaret(getText().length());
 			}

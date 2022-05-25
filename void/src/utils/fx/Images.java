@@ -10,7 +10,9 @@ import javafx.scene.image.*;
  */
 public final class Images {
 	
-	public static final Image MUD_BALL = get("mudball.png");
+	public static final Image
+		MUD_BALL = get("mudball.png"),
+		DEBUG_RIGHT_ARROW = get("debugrightarrow.png");
 	
 	private Images() {
 		

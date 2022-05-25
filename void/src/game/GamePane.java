@@ -18,24 +18,31 @@ public final class GamePane extends Pane implements UpdatablePane {
 		return INSTANCE;
 	}
 	
+	private final Pane debugLayer;
 	private final Label mu;
 	private final List<Node> eouRemoves;
 	
 	private Save save;
 	
 	private GamePane() {
+		debugLayer = new Pane(DebugMenu.get());
 		Nodes.setPrefSize(this, VoidScene.WIDTH, VoidScene.HEIGHT);
 		addEventHandler(MouseEvent.MOUSE_CLICKED, me -> {
 			if(me.getButton() == MouseButton.PRIMARY) {
 				Projectile ball = new Projectile(BigInteger.ONE);
 				ball.setCenter(me.getX(), me.getY());
-				getChildren().add(ball);
+				GameLayer.get().getChildren().add(ball);
+			}
+			else if(me.getButton() == MouseButton.SECONDARY) {
+				DebugMenu.get().display(me);
 			}
 		});
 		eouRemoves = new ArrayList<>();
 		mu = new Label();
 		mu.getStyleClass().add("mu");
-		getChildren().add(mu);
+		GameLayer.get().getChildren().add(mu);
+		getChildren().addAll(GameLayer.get(), debugLayer);
+		debugLayer.setPickOnBounds(false);
 	}
 	
 	@Override

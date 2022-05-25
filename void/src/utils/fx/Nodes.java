@@ -1,5 +1,6 @@
 package utils.fx;
 
+import javafx.scene.Node;
 import javafx.scene.layout.Region;
 
 public final class Nodes {
@@ -28,6 +29,11 @@ public final class Nodes {
 	public static void setPrefSize(Region r, double width, double height) {
 		r.setPrefWidth(width);
 		r.setPrefHeight(height);
+	}
+	
+	public static void setLayout(Node node, double x, double y) {
+		node.setLayoutX(x);
+		node.setLayoutY(y);
 	}
 	
 }

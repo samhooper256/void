@@ -5,3 +5,18 @@
 .mu {
 	-fx-font: 72 "Crimson Pro ExtraLight";
 }
+
+.debug-item {
+	-fx-background-color: white;
+	-fx-fill-height: false;
+	-fx-alignment: center-left;
+	-fx-padding: 0 4 0 4;
+}
+
+.debug-item:hover {
+	-fx-background-color: lightblue;
+}
+
+.debug-item .label {
+	-fx-font: 18 "Georgia";
+}

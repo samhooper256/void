@@ -44,7 +44,7 @@ public final class ScaledPane extends Pane implements UpdatablePane {
 	
 	public void showGame() {
 		setChildren(GamePane.get());
-		GamePane.get().setupSave(new Save()); //TODO move this elsewhere.
+		GamePane.get().setupSave(new Save()); //TODO move this elsewhere - we should not create a new save every time obv.
 	}
 
 	private void setChildren(Node... children) {

@@ -39,7 +39,7 @@ class Projectile extends StackPane implements Updatable {
 		double sec = diff * 1e-9;
 		double xdist = Math.cos(angrad) * velocity() * sec, ydist = Math.sin(angrad) * velocity() * sec;
 		if(Math.abs(xdist) > Math.abs(VoidScene.CENTER_X - getCenterX()))
-			GamePane.get().reachedCenter(this);
+			GameLayer.get().reachedCenter(this);
 		else
 			setCenter(getCenterX() + xdist, getCenterY() + ydist);
 	}

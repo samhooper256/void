@@ -2,7 +2,7 @@ package base;
 
 import java.util.Set;
 
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.*;
 
 /** <p>A {@link TextField} that, in addition to listening for {@link KeyEvent KeyEvents} like a usual text field,
@@ -14,20 +14,28 @@ public class ExplicitIntegerField extends TextField implements KeyListener {
 	private static final Set<String> LEGAL_KEY_TEXTS =
 			Set.of("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "e", "E");
 	
-	//Optional TODO - make this support more features (e.g. selecting text, Ctrl+A, Home and End keys, Ctrl+V, etc.)
+	//Optional TODO - make this support more features (e.g. selecting text with arrow keys, Home and End keys, Ctrl+C, Ctrl+V, etc.)
 	@Override
 	public void handle(KeyEvent event) {
 		if(event.getEventType() == KeyEvent.KEY_PRESSED) {
 			final String key = event.getText(), text = getText();
-			final int cpos = getCaretPosition();
+			final IndexRange srange = getSelection();
+			final int cpos = getCaretPosition(), srs = srange.getStart(), sre = srange.getEnd();
 			if(key.length() == 1 && LEGAL_KEY_TEXTS.contains(key)) {
-				setText(text + key);
-				positionCaret(getText().length());
+				if(srs != sre)
+					setText(text.substring(0, srs) + key + text.substring(sre));
+				else
+					setText(text.substring(0, cpos) + key + text.substring(cpos));
+				positionCaret(cpos + 1);
 			}
 			else {
 				KeyCode code = event.getCode();
 				if(code == KeyCode.BACK_SPACE) {
-					if(Void.isDown(KeyCode.CONTROL) || Void.isDown(KeyCode.COMMAND)) {
+					if(srs != sre) {
+						setText(text.substring(0, srs) + text.substring(sre));
+						positionCaret(srange.getStart());
+					}
+					else if(ctrlDown()) {
 						setText("");
 					}
 					else if(cpos != 0) {
@@ -36,13 +44,32 @@ public class ExplicitIntegerField extends TextField implements KeyListener {
 					}
 				}
 				else if(code == KeyCode.LEFT && cpos != 0) {
-					positionCaret(cpos - 1);
+					if(ctrlDown())
+						positionCaret(0);
+					else
+						positionCaret(cpos - 1);
 				}
 				else if(code == KeyCode.RIGHT && cpos != text.length()) {
-					positionCaret(cpos + 1);
+					if(ctrlDown())
+						positionCaret(text.length());
+					else
+						positionCaret(cpos + 1);
+				}
+				else if(code == KeyCode.A && ctrlDown()) {
+					selectAll();
+				}
+				else if(code == KeyCode.HOME) {
+					positionCaret(0);
+				}
+				else if(code == KeyCode.END) {
+					positionCaret(text.length());
 				}
 			}
 		}
+	}
+	
+	private static boolean ctrlDown() {
+		return Void.isDown(KeyCode.CONTROL) || Void.isDown(KeyCode.COMMAND);
 	}
 	
 }

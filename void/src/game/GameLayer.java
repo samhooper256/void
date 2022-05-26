@@ -1,48 +1,47 @@
 package game;
 
-import java.math.BigInteger;
 import java.util.*;
 
 import base.*;
+import game.feeders.*;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import utils.fx.Nodes;
 
-final class GameLayer extends Pane implements UpdatablePane {
+public final class GameLayer extends Pane implements UpdatablePane {
 
 	private static final GameLayer INSTANCE = new GameLayer();
 	
-	static GameLayer get() {
+	public static GameLayer get() {
 		return INSTANCE;
 	}
 	
-	private final List<Node> eouRemoves;
+	/** Removes happen before adds. */
+	private final List<Node> eouRemoves, eouAdds;
+	private final List<Runnable> eouActions;
 	private final Label mu;
 	
 	private Save save;
 	
 	private GameLayer() {
 		Nodes.setPrefSize(this, VoidScene.WIDTH, VoidScene.HEIGHT);
-		addEventHandler(MouseEvent.MOUSE_CLICKED, me -> {
-			if(me.getButton() == MouseButton.PRIMARY)
-				addProjectile(new Projectile(BigInteger.ONE), me.getX(), me.getY());
-		});
 		mu = new Label();
 		mu.getStyleClass().add("mu");
 		getChildren().add(mu);
 		eouRemoves = new ArrayList<>();
+		eouAdds = new ArrayList<>();
+		eouActions = new ArrayList<>();
 	}
 	
 	/** Assumes the given {@link Projectile} has already been positioned properly. */
-	void addProjectile(Projectile projectile) {
-		getChildren().add(projectile);
+	public void addProjectile(Projectile projectile) {
+		eouAdds.add(projectile);
 	}
 	
 	/** Identical to {@link #addProjectile(Projectile)}, except it
 	 * {@link Projectile#setCenter(double, double) sets the center} of the given {@link Projectile} first. */
-	void addProjectile(Projectile projectile, double centerX, double centerY) {
+	public void addProjectile(Projectile projectile, double centerX, double centerY) {
 		projectile.setCenter(centerX, centerY);
 		addProjectile(projectile);
 	}
@@ -51,6 +50,12 @@ final class GameLayer extends Pane implements UpdatablePane {
 	public void update(long diff) {
 		UpdatablePane.super.update(diff);
 		getChildren().removeAll(eouRemoves);
+		getChildren().addAll(eouAdds);
+		for(Runnable eouAction : eouActions)
+			eouAction.run();
+		eouRemoves.clear();
+		eouAdds.clear();
+		eouActions.clear();
 	}
 	
 	/** Should only be called by {@link Projectile}. Used to notify this {@link GameLayer} that a projectile has reached
@@ -64,16 +69,23 @@ final class GameLayer extends Pane implements UpdatablePane {
 	}
 	
 	public void setupSave(Save save) {
-		this.save = save;
-		if(save.isInAscension()) {
-			updateMU();
-		}
-		else {
-			throw new UnsupportedOperationException("Unfinished"); //TODO
+		this.save = save;updateMU();
+		Ascension a = save.ascension();
+		for(FeederData fd : a.getFeederData()) {
+			Feeder feeder = new Feeder(fd);
+			getChildren().addAll(feeder, feeder.pane());
 		}
 	}
 	
-	private void updateMU() {
+	public void addEOUAction(Runnable action) {
+		eouActions.add(action);
+	}
+	
+	public Save save() {
+		return save;
+	}
+	
+	public void updateMU() {
 		mu.setText(Formatter.format(save.mu()));
 	}
 	

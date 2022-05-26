@@ -16,7 +16,7 @@ public final class GamePane extends Pane implements UpdatablePane, KeyListener {
 	private GamePane() {
 		Nodes.setPrefSize(this, VoidScene.WIDTH, VoidScene.HEIGHT);
 		addEventFilter(MouseEvent.MOUSE_CLICKED, me -> {
-			if(me.getTarget() == GameLayer.get())
+			if(me.getTarget() != DebugLayer.get())
 				DebugLayer.get().inspectEventTargettedToGameLayer(me);
 		});
 		getChildren().addAll(GameLayer.get(), DebugLayer.get());

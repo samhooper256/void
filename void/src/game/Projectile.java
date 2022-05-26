@@ -7,14 +7,17 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import utils.fx.*;
 
-class Projectile extends StackPane implements Updatable {
+public class Projectile extends StackPane implements Updatable {
 
-	private static final double DEFAULT_VELOCITY = 100; //pixels per second
+	private static final double DEFAULT_VELOCITY = 200; //pixels per second
+	private static final double ACCELERATION = 100; //pixels per second per second
 	
 	private final ResizableImage rimage;
 	
-	private final double width, height, velocity;
+	private final double width, height;
 	private final BigInteger mu;
+	
+	private double velocity;
 	
 	public Projectile(BigInteger mu) {
 		this(mu, Images.MUD_BALL);
@@ -31,12 +34,14 @@ class Projectile extends StackPane implements Updatable {
 		height = image.getHeight();
 		this.velocity = velocity;
 		getChildren().add(rimage);
+		setMouseTransparent(true);
 	}
 	
 	@Override
 	public void update(long diff) {
 		double angrad = Math.atan2(VoidScene.CENTER_Y - getCenterY(), VoidScene.CENTER_X - getCenterX());
 		double sec = diff * 1e-9;
+		velocity += ACCELERATION * sec;
 		double xdist = Math.cos(angrad) * velocity() * sec, ydist = Math.sin(angrad) * velocity() * sec;
 		if(Math.abs(xdist) > Math.abs(VoidScene.CENTER_X - getCenterX()))
 			GameLayer.get().reachedCenter(this);

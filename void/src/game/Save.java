@@ -1,11 +1,14 @@
 package game;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.*;
 
 /** A game save. */
-public final class Save {
+public final class Save implements Serializable {
 
+	private static final long serialVersionUID = -5226145427742382698L;
+	
 	private List<AscensionLog> pastAscensions;
 	private Ascension ascension;
 	
@@ -17,20 +20,11 @@ public final class Save {
 	/** If {@link #isInAscension() in an ascension}, returns the number of meaning units the player currently has.
 	 * @throws IllegalStateException if the player is not in an ascension. */
 	public BigInteger mu() {
-		if(isInAscension())
-			return ascension().mu();
-		throw new IllegalStateException("Not currently in an ascension");
+		return ascension().mu();
 	}
 	
-	public boolean isInAscension() {
-		return !isBetweenAscensions();
-	}
-	
-	public boolean isBetweenAscensions() {
-		return ascension == null;
-	}
-	
-	/** Return the current {@link Ascension} if {@link #isInAscension() in an ascension}, {@code null} otherwise. */
+	/** Return the current {@link Ascension} if {@link #isInAscension() in an ascension}. Note that the current
+	 * {@link Ascension} changes as soon as the player clicks "Ascend".*/
 	public Ascension ascension() {
 		return ascension;
 	}

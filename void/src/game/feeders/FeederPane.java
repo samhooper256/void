@@ -23,7 +23,7 @@ public final class FeederPane extends Pane {
 			setOnAction(ae -> {
 				GameLayer.get().addEOUAction(() -> {
 					feeder.data().levelUp();
-					postLevelUpdates();
+					GameLayer.get().updateMU();
 				});
 			});
 		}
@@ -62,12 +62,7 @@ public final class FeederPane extends Pane {
 		return feeder;
 	}
 	
-	private void postLevelUpdates() {
-		GameLayer.get().updateMU();
-		update();
-	}
-	
-	void update() {
+	public void update() {
 		updateLevel();
 		level1.update();
 	}

@@ -6,6 +6,7 @@ import base.*;
 import game.feeders.*;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import utils.fx.Nodes;
 
@@ -23,6 +24,7 @@ public final class GameLayer extends Pane implements UpdatablePane {
 	private final Label mu;
 	
 	private Save save;
+	private Feeder selectedFeeder;
 	
 	private GameLayer() {
 		Nodes.setPrefSize(this, VoidScene.WIDTH, VoidScene.HEIGHT);
@@ -32,6 +34,32 @@ public final class GameLayer extends Pane implements UpdatablePane {
 		eouRemoves = new ArrayList<>();
 		eouAdds = new ArrayList<>();
 		eouActions = new ArrayList<>();
+	}
+	
+	@Override
+	public void update(long diff) {
+		UpdatablePane.super.update(diff);
+		getChildren().removeAll(eouRemoves);
+		getChildren().addAll(eouAdds);
+		for(Runnable eouAction : eouActions)
+			eouAction.run();
+		eouRemoves.clear();
+		eouAdds.clear();
+		eouActions.clear();
+	}
+	
+	/** The {@link MouseEvent} is assumed to be {@link MouseEvent#MOUSE_CLICKED}. */
+	public void feederClicked(Feeder feeder, MouseEvent me) {
+		if(feeder == selectedFeeder) {
+			feeder.hidePane();
+			selectedFeeder = null;
+		}
+		else {
+			if(selectedFeeder != null)
+				selectedFeeder.hidePane();
+			selectedFeeder = feeder;
+			feeder.updateAndShowPane();
+		}
 	}
 	
 	/** Assumes the given {@link Projectile} has already been positioned properly. */
@@ -46,18 +74,6 @@ public final class GameLayer extends Pane implements UpdatablePane {
 		addProjectile(projectile);
 	}
 
-	@Override
-	public void update(long diff) {
-		UpdatablePane.super.update(diff);
-		getChildren().removeAll(eouRemoves);
-		getChildren().addAll(eouAdds);
-		for(Runnable eouAction : eouActions)
-			eouAction.run();
-		eouRemoves.clear();
-		eouAdds.clear();
-		eouActions.clear();
-	}
-	
 	/** Should only be called by {@link Projectile}. Used to notify this {@link GameLayer} that a projectile has reached
 	 * the center. */
 	void reachedCenter(Projectile p) {
@@ -85,8 +101,11 @@ public final class GameLayer extends Pane implements UpdatablePane {
 		return save;
 	}
 	
+	/** Causes the {@link FeederPane} of the selected {@link Feeder}, if any, to be updated. */
 	public void updateMU() {
 		mu.setText(Formatter.format(save.mu()));
+		if(selectedFeeder != null)
+			selectedFeeder.pane().update();
 	}
 	
 }

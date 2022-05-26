@@ -23,20 +23,20 @@ public final class Feeder extends Pane implements Updatable {
 		getChildren().add(rimage);
 		setPickOnBounds(false);
 		untilNext = data.rate();
-		addEventHandler(MouseEvent.MOUSE_CLICKED, me -> {
-			if(me.getButton() == MouseButton.PRIMARY) {
-				if(pane().isVisible()) {
-					pane().setVisible(false);
-				}
-				else {
-					pane().setLayoutX(tag().x() + width() + SIDE_SPACING);
-					pane().setLayoutY(tag().y());
-					pane().setVisible(true);
-				}
-			}
-		});
+		addEventHandler(MouseEvent.MOUSE_CLICKED, me -> GameLayer.get().feederClicked(this, me));
 	}
-
+	
+	public void hidePane() {
+		pane().setVisible(false);
+	}
+	
+	public void updateAndShowPane() {
+		pane().update();
+		pane().setLayoutX(tag().x() + width() + SIDE_SPACING);
+		pane().setLayoutY(tag().y());
+		pane().setVisible(true);
+	}
+	
 	FeederTag tag() {
 		return data.tag();
 	}

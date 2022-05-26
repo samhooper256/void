@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import utils.BigNumbers;
 
-final class Formatter {
+public final class Formatter {
 	
 	private static final int SIGNIFICANT_DIGITS_SHOWN = 4;
 	private static final String RADIX_POINT = ".", EXPONENT_INDICATOR = "e";

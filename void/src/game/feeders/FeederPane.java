@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import utils.fx.Backgrounds;
 
 /** Invisible by default. */
-public final class FeederPane extends Pane {
+public final class FeederPane extends StackPane {
 
 	private class Level1 extends Button {
 		
@@ -43,17 +43,23 @@ public final class FeederPane extends Pane {
 		
 	}
 	
+	private static final String CSS = "feeder-pane", NAME_AND_LEVEL_CSS = "name-and-level";
+	
 	private final Feeder feeder;
 	private final VBox vBox;
-	private final Label nameAndLevel;
+	private final Label nameAndLevel, mups;
 	private final Level1 level1;
 	
 	public FeederPane(Feeder feeder) {
 		this.feeder = feeder;
 		nameAndLevel = new Label(feeder.tag().displayName() + ", Level " + feeder.data().level());
+		nameAndLevel.getStyleClass().add(NAME_AND_LEVEL_CSS);
+		mups = new Label();
+		updatemups();
 		level1 = new Level1();
-		vBox = new VBox(nameAndLevel, level1);
+		vBox = new VBox(nameAndLevel, mups, level1);
 		getChildren().add(vBox);
+		getStyleClass().add(CSS);
 		setVisible(false);
 		setBackground(Backgrounds.of(Color.gray(.75)));
 	}
@@ -64,6 +70,7 @@ public final class FeederPane extends Pane {
 	
 	public void update() {
 		updateLevel();
+		updatemups();
 		level1.update();
 	}
 	
@@ -71,6 +78,10 @@ public final class FeederPane extends Pane {
 		String text = nameAndLevel.getText();
 		int space = text.lastIndexOf(' ');
 		nameAndLevel.setText(text.substring(0, space + 1) + feeder.data().level());
+	}
+
+	private void updatemups() {
+		mups.setText("MUPS: " + Formatter.format(feeder().data().mupsRounded()));
 	}
 	
 }

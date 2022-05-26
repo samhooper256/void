@@ -35,3 +35,18 @@
 	-fx-alignment: center-left;
 	-fx-padding: 0 2 0 2;
 }
+
+.feeder-pane {
+	-fx-padding: 6;
+	-fx-background-color: rgb(80, 80, 80);
+	-fx-background-radius: 4;
+}
+
+.feeder-pane .label {
+	-fx-font: 14 "Georgia";
+	-fx-text-fill: white;
+}
+
+.feeder-pane .name-and-level {
+	-fx-font: 18 "Georgia";
+}

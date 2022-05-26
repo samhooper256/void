@@ -10,7 +10,8 @@ public final class FeederData implements Serializable {
 	
 	private static final long serialVersionUID = -6769666422252417179L;
 	private static final double COST_INCREASE_FACTOR = 1.1;
-	private static final MathContext nextCostContext = new MathContext(0);
+	private static final MathContext NEAREST_INTEGER = new MathContext(0);
+	private static final BigDecimal E9 = BigDecimal.valueOf(1_000_000_000);
 	
 	/** Storing the {@link FeederTag#ordinal() ordinal} instead of the {@link FeederTag} itself makes this
 	 * {@link FeederData} object cheaper to serialize. */
@@ -42,7 +43,7 @@ public final class FeederData implements Serializable {
 		return level().multiply(tag().baseMU());
 	}
 	
-	/** Returns the rate in ns at which this {@link Feeder} produces projectiles, <em>including</em> any temporary
+	/** Returns the rate in ns/throw at which this {@link Feeder} throws projectiles, <em>including</em> any temporary
 	 * effects. */
 	public long rate() {
 		return tag().baseRate();
@@ -60,8 +61,12 @@ public final class FeederData implements Serializable {
 	
 	public BigInteger costOfLevelAfter(BigInteger level) {
 		return tag().baseCostAsBigDecimal().multiply(
-				BigDecimal.valueOf(Math.pow(COST_INCREASE_FACTOR, level.doubleValue() - 1)), nextCostContext)
+				BigDecimal.valueOf(Math.pow(COST_INCREASE_FACTOR, level.doubleValue() - 1)), NEAREST_INTEGER)
 				.toBigInteger();
+	}
+	
+	public BigInteger mupsRounded() {
+		return new BigDecimal(mu()).divide(new BigDecimal(rate())).multiply(E9, NEAREST_INTEGER).toBigInteger();
 	}
 	
 }

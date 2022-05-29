@@ -7,8 +7,8 @@ import game.feeders.*;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.*;
-import javafx.scene.layout.Pane;
-import utils.fx.Nodes;
+import javafx.scene.layout.*;
+import utils.fx.*;
 
 public final class GameLayer extends Pane implements UpdatablePane {
 
@@ -30,7 +30,7 @@ public final class GameLayer extends Pane implements UpdatablePane {
 		Nodes.setPrefSize(this, VoidScene.WIDTH, VoidScene.HEIGHT);
 		mu = new Label();
 		mu.getStyleClass().add("mu");
-		getChildren().addAll(VoidLayer.get(), mu);
+		getChildren().add(Panes.vBoxBuilder(mu).styleClass("mu-box").allWidths(VoidScene.WIDTH).build());
 		eouRemoves = new ArrayList<>();
 		eouAdds = new ArrayList<>();
 		eouActions = new ArrayList<>();
@@ -85,7 +85,8 @@ public final class GameLayer extends Pane implements UpdatablePane {
 	}
 	
 	public void setupSave(Save save) {
-		this.save = save;updateMU();
+		this.save = save;
+		updateMU();
 		Ascension a = save.ascension();
 		for(FeederData fd : a.getFeederData()) {
 			Feeder feeder = new Feeder(fd);

@@ -6,6 +6,10 @@
 	-fx-font: 72 "Crimson Pro ExtraLight";
 }
 
+.mu-box {
+	-fx-alignment: top-center;
+}
+
 .debug-vbox {
 	-fx-fill-width: true;	
 }

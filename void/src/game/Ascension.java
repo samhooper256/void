@@ -53,7 +53,7 @@ public final class Ascension implements Serializable {
 	/** Cannot initiate a feeder that this {@link Ascension} already {@link #hasFeeder(FeederTag) has} nor one this
 	 * ascension cannot {@link #canAfford(BigInteger) afford} the initiation cost of. */
 	public boolean canInitiate(FeederTag tag) {
-		return !hasFeeder(tag) && canAfford(FeederUtils.trueInitiationCost(tag, save));
+		return !hasFeeder(tag) && canAfford(initiationCost(tag));
 	}
 	
 	/** @throws IllegalStateException if this {@link Ascension} {@link #hasFeeder(FeederTag) has} the given feeder. */
@@ -62,6 +62,10 @@ public final class Ascension implements Serializable {
 			throw new IllegalStateException(String.format("Already have Feeder: %s", tag));
 	}
 
+	public BigInteger initiationCost(FeederTag tag) {
+		return FeederUtils.trueInitiationCost(tag, save);
+	}
+	
 	public boolean canAfford(BigInteger cost) {
 		return cost.compareTo(mu()) <= 0;
 	}

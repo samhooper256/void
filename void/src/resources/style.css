@@ -76,7 +76,7 @@
 	-fx-spacing: 4;	
 }
 
-.level-button {
+.feeder-pane-button {
 	-fx-alignment: center;
 	-fx-background-color: #32abe3;
 	-fx-border-width: 2;
@@ -84,23 +84,23 @@
 	-fx-border-radius: 1;
 }
 
-.level-button .graphic {
+.feeder-pane-button .graphic {
 	-fx-alignment: center;	
 }
 
-.level-button .graphic .label {
+.feeder-pane-button .graphic .label {
 	-fx-text-fill: gold;
 }
 
-.level-button .cost {
+.feeder-pane-button .cost {
 	-fx-font-weight: bold;
 }
 
-.level-button:disabled {
+.feeder-pane-button:disabled {
 	-fx-background-color: blue;	
 }
 
-.level-button:hover {
+.feeder-pane-button:hover {
 	-fx-background-color: #1db3c4;	
 	-fx-border-color: #1b919e;
 }

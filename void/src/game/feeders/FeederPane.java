@@ -9,53 +9,9 @@ import javafx.scene.paint.Color;
 import utils.fx.Backgrounds;
 
 /** Invisible by default. */
-public final class FeederPane extends StackPane {
-
-	private static class LevelButton extends Button {
-		
-		private static final String CSS = "level-button", GRAPHIC_CSS = "graphic", COST_CSS = "cost";
-		
-		final VBox graphic;
-		final Label cost;
-		
-		LevelButton() {
-			graphic = new VBox();
-			graphic.getStyleClass().add(GRAPHIC_CSS);
-			cost = new Label();
-			cost.getStyleClass().add(COST_CSS);
-			setGraphic(graphic);
-			getStyleClass().add(CSS);
-		}
-		
-	}
-
-	private abstract static class BasicLevelButton extends LevelButton {
-
-		BasicLevelButton(String titleText) {
-			Label title = new Label(titleText);
-			updateCost();
-			graphic.getChildren().addAll(title, cost);
-			setFocusTraversable(false);
-		}
-		
-		abstract BigInteger getCost();
-		
-		void updateCost() {
-			cost.setText(Formatter.format(getCost()));
-		}
-		
-		private boolean isAffordable() {
-			return Hub.canAfford(getCost());
-		}
-		
-		void update() {
-			updateCost();
-			setDisable(!isAffordable());
-		}
-		
-	}
+public final class FeederPane extends AbstractFeederPane {
 	
-	private class Level1 extends BasicLevelButton {
+	private class Level1 extends SimpleFeederPaneButton {
 		
 		Level1() {
 			super("Level Up");
@@ -74,7 +30,7 @@ public final class FeederPane extends StackPane {
 		
 	}
 	
-	private class Level10 extends BasicLevelButton {
+	private class Level10 extends SimpleFeederPaneButton {
 		
 		Level10() {
 			super("Level 10x");
@@ -93,17 +49,13 @@ public final class FeederPane extends StackPane {
 		
 	}
 
-	private static final String
-		CSS = "feeder-pane",
-		TITLE_BAR_CSS = "title-bar",
-		LEVEL_BOX_CSS = "level-box",
-		LEVEL_BOX_LAYER_1 = "layer-1";
+	private static final String LEVEL_BOX_CSS = "level-box", LEVEL_BOX_LAYER_1 = "layer-1";
 	
 	private final Feeder feeder;
-	private final VBox vBox, levelBox;
-	private final HBox titleBar, levelBoxLayer1;
+	private final VBox levelBox;
+	private final HBox levelBoxLayer1;
 	private final Label nameAndLevel, mups, perThrow, delay;
-	private final BasicLevelButton level1, level10;
+	private final SimpleFeederPaneButton level1, level10;
 	
 	public FeederPane(Feeder feeder) {
 		this.feeder = feeder;
@@ -111,8 +63,7 @@ public final class FeederPane extends StackPane {
 		mups = new Label();
 		perThrow = new Label();
 		delay = new Label();
-		titleBar = new HBox(nameAndLevel, mups);
-		titleBar.getStyleClass().add(TITLE_BAR_CSS);
+		titleBar.getChildren().addAll(nameAndLevel, mups);
 		level1 = new Level1();
 		level10 = new Level10();
 		levelBoxLayer1 = new HBox(level1, level10);
@@ -120,10 +71,7 @@ public final class FeederPane extends StackPane {
 		levelBox = new VBox(levelBoxLayer1);
 		levelBox.getStyleClass().add(LEVEL_BOX_CSS);
 		update();
-		vBox = new VBox(titleBar, perThrow, delay, levelBox);
-		getChildren().add(vBox);
-		getStyleClass().add(CSS);
-		setVisible(false);
+		vBox.getChildren().addAll(perThrow, delay, levelBox);
 		setBackground(Backgrounds.of(Color.gray(.75)));
 	}
 	
@@ -131,6 +79,7 @@ public final class FeederPane extends StackPane {
 		return feeder;
 	}
 	
+	@Override
 	public void update() {
 		updateLevel();
 		updatemups();

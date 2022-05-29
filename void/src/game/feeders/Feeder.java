@@ -2,13 +2,10 @@ package game.feeders;
 
 import base.Updatable;
 import game.*;
-import javafx.scene.input.*;
 import utils.fx.*;
 
 public final class Feeder extends AbstractFeeder implements Updatable {
 
-	private static final double SIDE_SPACING = 6;
-	
 	private final FeederData data;
 	private final FeederPane pane;
 	
@@ -22,18 +19,6 @@ public final class Feeder extends AbstractFeeder implements Updatable {
 		getChildren().add(rimage);
 		setPickOnBounds(false);
 		untilNext = data.rate();
-		addEventHandler(MouseEvent.MOUSE_CLICKED, me -> GameLayer.get().feederClicked(this, me));
-	}
-	
-	public void hidePane() {
-		pane().setVisible(false);
-	}
-	
-	public void updateAndShowPane() {
-		pane().update();
-		pane().setLayoutX(topLeftX() + width() + SIDE_SPACING);
-		pane().setLayoutY(topLeftY());
-		pane().setVisible(true);
 	}
 	
 	@Override
@@ -45,6 +30,7 @@ public final class Feeder extends AbstractFeeder implements Updatable {
 		return data;
 	}
 
+	@Override
 	public FeederPane pane() {
 		return pane;
 	}

@@ -25,7 +25,7 @@ public final class GameLayer extends Pane implements UpdatablePane {
 	private final Label muDisplay, muText;
 	
 	private Save save;
-	private Feeder selectedFeeder;
+	private AbstractFeeder selectedFeeder;
 	
 	private GameLayer() {
 		Nodes.setPrefSize(this, VoidScene.WIDTH, VoidScene.HEIGHT);
@@ -53,7 +53,7 @@ public final class GameLayer extends Pane implements UpdatablePane {
 	}
 	
 	/** The {@link MouseEvent} is assumed to be {@link MouseEvent#MOUSE_CLICKED}. */
-	public void feederClicked(Feeder feeder, MouseEvent me) {
+	public void feederClicked(AbstractFeeder feeder, MouseEvent me) {
 		if(feeder == selectedFeeder) {
 			feeder.hidePane();
 			selectedFeeder = null;
@@ -99,7 +99,7 @@ public final class GameLayer extends Pane implements UpdatablePane {
 		for(FeederTag tag : FeederTag.listValues()) {
 			if(!save.ascension().hasFeeder(tag)) {
 				UninitiatedFeeder uf = new UninitiatedFeeder(tag);
-				getChildren().add(uf);
+				getChildren().addAll(uf, uf.pane());
 			}
 		}
 	}

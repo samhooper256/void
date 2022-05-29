@@ -45,7 +45,7 @@ public final class FeederPane extends StackPane {
 		}
 		
 		private boolean isAffordable() {
-			return getCost().compareTo(Hub.mu()) <= 0;
+			return Hub.canAfford(getCost());
 		}
 		
 		void update() {

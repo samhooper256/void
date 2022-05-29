@@ -4,6 +4,14 @@ import java.math.BigInteger;
 
 public class BigNumbers {
 	
+	public static BigInteger integer(long num) {
+		return BigInteger.valueOf(num);
+	}
+	
+	public static BigInteger integer(String s) {
+		return new BigInteger(s);
+	}
+	
 	public static int digitCount(BigInteger bi) {
 		if(isZero(bi))
 			return 1;

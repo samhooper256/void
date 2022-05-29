@@ -21,6 +21,10 @@ public final class Hub {
 		return save().mu();
 	}
 
+	public static boolean canAfford(BigInteger cost) {
+		return save().canAfford(cost);
+	}
+	
 	public static void loseMU(BigInteger mu) {
 		ascension().lose(mu);
 	}

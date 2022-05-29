@@ -10,13 +10,16 @@ public final class Ascension implements Serializable {
 
 	private static final long serialVersionUID = -8214211348207545572L;
 	
+	private final Save save;
+	
 	private BigInteger mu;
 	private Map<FeederTag, FeederData> feeders;
 	
 	/** The ascension starts with zero {@link #mu()}.*/
-	public Ascension() {
+	public Ascension(Save save) {
 		mu = BigInteger.ZERO;
 		feeders = new HashMap<>();
+		this.save = save;
 		feeders.put(FeederTag.MUD_SLINGER, new FeederData(FeederTag.MUD_SLINGER, 1));
 	}
 	
@@ -45,6 +48,22 @@ public final class Ascension implements Serializable {
 	/** returns {@code null} if this {@link Ascension} does not {@link #hasFeeder(FeederTag) have} the feeder. */
 	public FeederData getFeederData(FeederTag tag) {
 		return feeders.get(tag);
+	}
+	
+	/** Cannot initiate a feeder that this {@link Ascension} already {@link #hasFeeder(FeederTag) has} nor one this
+	 * ascension cannot {@link #canAfford(BigInteger) afford} the initiation cost of. */
+	public boolean canInitiate(FeederTag tag) {
+		return !hasFeeder(tag) && canAfford(FeederUtils.trueInitiationCost(tag, save));
+	}
+	
+	/** @throws IllegalStateException if this {@link Ascension} {@link #hasFeeder(FeederTag) has} the given feeder. */
+	public void initiate(FeederTag tag) {
+		if(hasFeeder(tag))
+			throw new IllegalStateException(String.format("Already have Feeder: %s", tag));
+	}
+
+	public boolean canAfford(BigInteger cost) {
+		return cost.compareTo(mu()) <= 0;
 	}
 	
 	public Collection<FeederData> getFeederData() {

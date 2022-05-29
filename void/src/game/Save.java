@@ -14,11 +14,10 @@ public final class Save implements Serializable {
 	
 	public Save() {
 		pastAscensions = new ArrayList<>();
-		ascension = new Ascension();
+		ascension = new Ascension(this);
 	}
 	
-	/** If {@link #isInAscension() in an ascension}, returns the number of meaning units the player currently has.
-	 * @throws IllegalStateException if the player is not in an ascension. */
+	/** Equivalent to {@code ascension().mu()}. */
 	public BigInteger mu() {
 		return ascension().mu();
 	}
@@ -29,6 +28,11 @@ public final class Save implements Serializable {
 		return ascension;
 	}
 	
+	public boolean canAfford(BigInteger cost) {
+		return ascension().canAfford(cost);
+	}
+	
+	public 
 	List<AscensionLog> pastAscensionsUnmodifiable() {
 		return Collections.unmodifiableList(pastAscensions);
 	}

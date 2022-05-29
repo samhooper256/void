@@ -1,15 +1,20 @@
 package game.feeders;
 
 import javafx.scene.image.Image;
+import utils.BigNumbers;
+import utils.fx.Images;
 
 import static base.VoidScene.CENTER_Y;
 import static base.VoidScene.CENTER_X;
 import static utils.fx.Images.*;
 
 import java.math.*;
+import java.util.List;
 
 public enum FeederTag {
-	MUD_SLINGER("Bob", BigDecimal.TEN, BigInteger.ZERO, BigInteger.ONE, (long) 1e9, 700, CENTER_Y - FEEDER.getHeight(),
+	MUD_SLINGER("Bob", BigInteger.ZERO, BigDecimal.TEN, BigInteger.ONE, (long) 1e9, 700, CENTER_Y - FEEDER.getHeight(),
+			FEEDER, MUD_BALL),
+	STICK_THROWER("Mosh", BigNumbers.integer(1000), BigDecimal.TEN, BigInteger.ONE, (long) 1e9, 720, 300,
 			FEEDER, MUD_BALL);
 	
 	private static final FeederTag[] VALUES = values();
@@ -19,23 +24,27 @@ public enum FeederTag {
 		return VALUES[ordinal];
 	}
 
+	/** O(1). Unmodifiable. */
+	public static List<FeederTag> listValues() {
+		return List.of(VALUES);
+	}
+	
 	private final String displayName;
 	private final BigDecimal baseCostAsBigDecimal;
-	private final BigInteger baseMU, initiationCost;
+	private final BigInteger baseMU, baseInitiationCost;
 	private final long baseRate;
-	private final double x, y;
+	private final double centerX, centerY;
 	private final Image image, projectileImage;
 	
-	FeederTag(String name, BigDecimal baseCostAsBigDecimal, BigInteger initiationCost, BigInteger baseMU, long baseRate,
-			double x, double y, Image image,
-			Image projectileImage) {
+	FeederTag(String name, BigInteger baseInitiationCost, BigDecimal baseCostAsBigDecimal, BigInteger baseMU, long baseRate,
+			double centerX, double centerY, Image image, Image projectileImage) {
 		this.displayName = name;
+		this.baseInitiationCost = baseInitiationCost;
 		this.baseCostAsBigDecimal = baseCostAsBigDecimal;
-		this.initiationCost = initiationCost;
 		this.baseMU = baseMU;
 		this.baseRate = baseRate;
-		this.x = x;
-		this.y = y;
+		this.centerX = centerX;
+		this.centerY = centerY;
 		this.image = image;
 		this.projectileImage = projectileImage;
 	}
@@ -49,8 +58,8 @@ public enum FeederTag {
 		return baseCostAsBigDecimal;
 	}
 	
-	public BigInteger initiationCost() {
-		return initiationCost;
+	public BigInteger baseInitiationCost() {
+		return baseInitiationCost;
 	}
 	
 	public BigInteger baseMU() {
@@ -62,16 +71,22 @@ public enum FeederTag {
 		return baseRate;
 	}
 	
-	public double x() {
-		return x;
+	/** center x. */
+	public double centerX() {
+		return centerX;
 	}
 	
-	public double y() {
-		return y;
+	/** center y */
+	public double centerY() {
+		return centerY;
 	}
 	
 	public Image image() {
 		return image;
+	}
+	
+	public Image uninitiatedImage() {
+		return Images.UNINITIATED_FEEDER;
 	}
 	
 	public Image projectileImage() {

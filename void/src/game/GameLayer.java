@@ -96,6 +96,12 @@ public final class GameLayer extends Pane implements UpdatablePane {
 			Feeder feeder = new Feeder(fd);
 			getChildren().addAll(feeder, feeder.pane());
 		}
+		for(FeederTag tag : FeederTag.listValues()) {
+			if(!save.ascension().hasFeeder(tag)) {
+				UninitiatedFeeder uf = new UninitiatedFeeder(tag);
+				getChildren().add(uf);
+			}
+		}
 	}
 	
 	public void addEOUAction(Runnable action) {

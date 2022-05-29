@@ -13,6 +13,7 @@ import utils.fx.*;
 public final class GameLayer extends Pane implements UpdatablePane {
 
 	private static final GameLayer INSTANCE = new GameLayer();
+	private static final double MU_TEXT_Y = 80;
 	
 	public static GameLayer get() {
 		return INSTANCE;
@@ -21,16 +22,19 @@ public final class GameLayer extends Pane implements UpdatablePane {
 	/** Removes happen before adds. */
 	private final List<Node> eouRemoves, eouAdds;
 	private final List<Runnable> eouActions;
-	private final Label mu;
+	private final Label muDisplay, muText;
 	
 	private Save save;
 	private Feeder selectedFeeder;
 	
 	private GameLayer() {
 		Nodes.setPrefSize(this, VoidScene.WIDTH, VoidScene.HEIGHT);
-		mu = new Label();
-		mu.getStyleClass().add("mu");
-		getChildren().add(Panes.vBoxBuilder(mu).styleClass("mu-box").allWidths(VoidScene.WIDTH).build());
+		muDisplay = Text.styledLabel("mu-display");
+		muText = Text.newLabel("Meaning Units", "mu-text");
+		muDisplay.layoutXProperty().bind(muDisplay.widthProperty().multiply(-.5).add(VoidScene.CENTER_X));
+		muText.layoutXProperty().bind(muText.widthProperty().multiply(-.5).add(VoidScene.CENTER_X));
+		muText.setLayoutY(MU_TEXT_Y);
+		getChildren().addAll(VoidLayer.get(), muDisplay, muText);
 		eouRemoves = new ArrayList<>();
 		eouAdds = new ArrayList<>();
 		eouActions = new ArrayList<>();
@@ -104,7 +108,7 @@ public final class GameLayer extends Pane implements UpdatablePane {
 	
 	/** Causes the {@link FeederPane} of the selected {@link Feeder}, if any, to be updated. */
 	public void updateMU() {
-		mu.setText(Formatter.format(save.mu()));
+		muDisplay.setText(Formatter.format(save.mu()));
 		if(selectedFeeder != null)
 			selectedFeeder.pane().update();
 	}

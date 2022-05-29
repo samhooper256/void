@@ -2,8 +2,12 @@
 	src: url("fonts/CrimsonPro-VariableFont_wght.ttf"); /* Crimson Pro ExtraLight */
 }
 
-.mu {
+.mu-display {
 	-fx-font: 72 "Crimson Pro ExtraLight";
+}
+
+.mu-text {
+	-fx-font: 24 "Crimson Pro ExtraLight";
 }
 
 .mu-box {

@@ -105,7 +105,25 @@
 	-fx-border-color: #1b919e;
 }
 
+.upgrades-pane .upgrades-column {
+	-fx-padding: 20;
+}
+
+.upgrade-display .hbox {
+	-fx-alignment: center-left;
+	-fx-spacing: 8;	
+}
+
+.upgrade-display .button {
+	-fx-font: 24 "Georgia";
+}
+
 .upgrades-tab .label {
 	-fx-font: 24 "Georgia";
+	-fx-text-fill: black;
+}
+
+.upgrade-display .label {
+	-fx-font: 18 "Georgia";
 	-fx-text-fill: black;
 }

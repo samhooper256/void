@@ -1,7 +1,8 @@
 package game.upgrades;
 
 import base.*;
-import javafx.scene.layout.Pane;
+import javafx.scene.Node;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import utils.Interpolation;
 import utils.fx.*;
@@ -14,8 +15,9 @@ public final class UpgradesPane extends Pane implements Updatable {
 	
 	static final double Y = 100, DEST_X = VoidScene.CENTER_X + 180;
 	
+	private static final String CSS = "upgrades-pane", COLUMN_CSS = "upgrades-column";
 	private static final double WIDTH = .5 * VoidScene.WIDTH, HEIGHT = VoidScene.HEIGHT - 2 * Y;
-	private static final long TRANSITION_DURATION = (long) 1e9;
+	private static final long TRANSITION_DURATION = (long) 1e9, UPDATE_COOLDOWN = (long) 1e9;
 	private static final Interpolation.Interpolator INTERPOLATOR = Interpolation::square;
 	private static final UpgradesPane INSTANCE = new UpgradesPane();
 	
@@ -23,12 +25,19 @@ public final class UpgradesPane extends Pane implements Updatable {
 		return INSTANCE;
 	}
 	
-	private long time;
+	private long animationTimer, updateTimer;
 	private State state;
+	private VBox upgradeColumn;
 	
 	private UpgradesPane() {
 		Nodes.setLayout(this, VoidScene.WIDTH, Y);
 		Nodes.setAllSizes(this, WIDTH, HEIGHT);
+		upgradeColumn = new VBox();
+		upgradeColumn.getStyleClass().add(COLUMN_CSS);
+		for(Upgrade u : Upgrade.values())
+			upgradeColumn.getChildren().add(new UpgradeDisplay(u));
+		getChildren().add(upgradeColumn);
+		getStyleClass().add(CSS);
 		setBackground(Backgrounds.of(Color.BROWN));
 		state = State.OFF;
 	}
@@ -36,45 +45,58 @@ public final class UpgradesPane extends Pane implements Updatable {
 	@Override
 	public void update(long diff) {
 		if(state == State.ENTERING) {
-			time = Math.min(time + diff, TRANSITION_DURATION);
-			if(time == TRANSITION_DURATION) {
-				time = 0;
+			animationTimer = Math.min(animationTimer + diff, TRANSITION_DURATION);
+			if(animationTimer == TRANSITION_DURATION) {
+				animationTimer = 0;
 				state = State.ON;
 				setLayoutX(DEST_X);
 				UpgradesTab.get().setLayoutX(UpgradesTab.DEST_X);
 			}
 			else {
-				double frac = (double) time / TRANSITION_DURATION;
+				double frac = (double) animationTimer / TRANSITION_DURATION;
 				setLayoutX(INTERPOLATOR.interpolate(VoidScene.WIDTH, DEST_X, frac));
 				UpgradesTab.get().setLayoutX(INTERPOLATOR.interpolate(UpgradesTab.START_X, UpgradesTab.DEST_X, frac));
 			}
 		}
 		else if(state == State.EXITING) {
-			time = Math.min(time + diff, TRANSITION_DURATION);
-			if(time == TRANSITION_DURATION) {
-				time = 0;
+			animationTimer = Math.min(animationTimer + diff, TRANSITION_DURATION);
+			if(animationTimer == TRANSITION_DURATION) {
+				animationTimer = 0;
 				state = State.OFF;
 				setLayoutX(VoidScene.WIDTH);
 				UpgradesTab.get().setLayoutX(UpgradesTab.START_X);
 			}
 			else {
-				double frac = (double) time / TRANSITION_DURATION;
+				double frac = (double) animationTimer / TRANSITION_DURATION;
 				setLayoutX(INTERPOLATOR.interpolate(DEST_X, VoidScene.WIDTH, frac));
 				UpgradesTab.get().setLayoutX(INTERPOLATOR.interpolate(UpgradesTab.DEST_X, UpgradesTab.START_X, frac));
 			}
 		}
+		if(state == State.ENTERING || state == State.ON) {
+			updateTimer += diff;
+			if(updateTimer >= UPDATE_COOLDOWN)
+				updateDisplays(); //sets updateTimer to 0
+		}
 	}
 	
-	public void startEntering() {
+	private void updateDisplays() {
+		for(Node n : upgradeColumn.getChildren())
+			if(n instanceof UpgradeDisplay ud)
+				ud.update();
+		updateTimer = 0;
+	}
+	
+	public void updateAndStartEntering() {
+		updateDisplays();
 		state = State.ENTERING;
-		time = 0;
+		animationTimer = 0;
 		setLayoutX(VoidScene.WIDTH);
 		UpgradesTab.get().setLayoutX(UpgradesTab.START_X);
 	}
 	
 	public void startExiting() {
 		state = State.EXITING;
-		time = 0;
+		animationTimer = 0;
 		setLayoutX(DEST_X);
 		UpgradesTab.get().setLayoutX(UpgradesTab.DEST_X);
 	}

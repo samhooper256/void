@@ -93,6 +93,10 @@ public final class Ascension implements Serializable {
 		upgrades.add(upgrade);
 	}
 	
+	public BigInteger trueCostOf(Upgrade upgrade) {
+		return upgrade.getTrueCost(save);
+	}
+	
 	public AscensionLog generateLog() {
 		return null; //TODO
 	}

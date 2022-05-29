@@ -38,7 +38,7 @@ public final class UpgradesTab extends Pane {
 				if(UpgradesPane.get().isFullyOn())
 					UpgradesPane.get().startExiting();
 				else
-					UpgradesPane.get().startEntering();
+					UpgradesPane.get().updateAndStartEntering();
 			}
 		});
 	}

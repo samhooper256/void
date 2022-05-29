@@ -46,7 +46,7 @@ public enum Upgrade {
 		return true;
 	}
 	
-	private BigInteger getTrueCost(Save save) {
+	public BigInteger getTrueCost(Save save) {
 		return baseCost; //TODO if anything modifies upgrade costs.
 	}
 	

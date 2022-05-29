@@ -2,6 +2,8 @@ package game;
 
 import java.math.BigInteger;
 
+import game.upgrades.Upgrade;
+
 public final class Hub {
 
 	private Hub() {
@@ -27,6 +29,10 @@ public final class Hub {
 	
 	public static void loseMU(BigInteger mu) {
 		ascension().lose(mu);
+	}
+	
+	public static boolean hasUpgrade(Upgrade upgrade) {
+		return ascension().hasUpgrade(upgrade);
 	}
 	
 }

@@ -4,6 +4,8 @@ import java.util.*;
 
 import base.*;
 import game.feeders.*;
+import game.feeders.data.FeederData;
+import game.upgrades.*;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.*;
@@ -34,7 +36,7 @@ public final class GameLayer extends Pane implements UpdatablePane {
 		muDisplay.layoutXProperty().bind(muDisplay.widthProperty().multiply(-.5).add(VoidScene.CENTER_X));
 		muText.layoutXProperty().bind(muText.widthProperty().multiply(-.5).add(VoidScene.CENTER_X));
 		muText.setLayoutY(MU_TEXT_Y);
-		getChildren().addAll(VoidLayer.get(), muDisplay, muText);
+		getChildren().addAll(VoidLayer.get(), muDisplay, muText, UpgradesPane.get(), UpgradesTab.get());
 		eouRemoves = new ArrayList<>();
 		eouAdds = new ArrayList<>();
 		eouActions = new ArrayList<>();

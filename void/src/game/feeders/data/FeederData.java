@@ -1,12 +1,13 @@
-package game.feeders;
+package game.feeders.data;
 
 import java.io.Serializable;
 import java.math.*;
 
 import game.*;
+import game.feeders.*;
 
 /** {@link FeederData} is serialized when a game {@link Save} is stored. */
-public final class FeederData implements Serializable {
+public abstract class FeederData implements Serializable {
 	
 	private static final long serialVersionUID = -6769666422252417179L;
 	private static final double
@@ -15,20 +16,20 @@ public final class FeederData implements Serializable {
 	private static final MathContext NEAREST_INTEGER = new MathContext(0);
 	private static final BigDecimal E9 = BigDecimal.valueOf(1_000_000_000);
 	
+	public static FeederData create(FeederTag tag) {
+		return tag.dataFactory().get();
+	}
+	
 	/** Storing the {@link FeederTag#ordinal() ordinal} instead of the {@link FeederTag} itself makes this
 	 * {@link FeederData} object cheaper to serialize. */
 	private final int tagOrdinal;
 	
 	private BigInteger level;
 	
-	/** {@link #level()} is {@code 1}. */
-	public FeederData(FeederTag tag) {
-		this(tag, 1);
-	}
-	
-	public FeederData(FeederTag tag, long startingLevel) {
+	/** Starts at level 1. */
+	protected FeederData(FeederTag tag) {
 		tagOrdinal = tag.ordinal();
-		level = BigInteger.valueOf(startingLevel);
+		level = BigInteger.ONE;
 	}
 
 	public BigInteger level() {
@@ -40,7 +41,8 @@ public final class FeederData implements Serializable {
 	}
 
 	/** Returns the {@link Projectile#mu()} of the projectiles produced by this feeder, <em>including</em> any temporary
-	 * effects. */
+	 * effects. This method should be overridden as most feeders will have their MU influenced by upgrades, abilities,
+	 * etc. */
 	public BigInteger mu() {
 		return level().multiply(tag().baseMU());
 	}

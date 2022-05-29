@@ -22,7 +22,7 @@ public class Projectile extends StackPane implements Updatable {
 	private double velocity;
 	
 	public Projectile(BigInteger mu) {
-		this(mu, Images.MUD_BALL);
+		this(mu, Images.SAND_BALL);
 	}
 	
 	public Projectile(BigInteger mu, Image image) {

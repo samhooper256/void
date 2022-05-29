@@ -55,7 +55,7 @@
 }
 
 .feeder-pane .label {
-	-fx-font: 14 "Georgia";
+	-fx-font: 18 "Georgia";
 	-fx-text-fill: white;
 }
 
@@ -65,7 +65,7 @@
 }
 
 .feeder-pane .title-bar .label {
-	-fx-font: 18 "Georgia";
+	-fx-font: 24 "Georgia";
 }
 
 .feeder-pane .level-box {
@@ -105,3 +105,7 @@
 	-fx-border-color: #1b919e;
 }
 
+.upgrades-tab .label {
+	-fx-font: 24 "Georgia";
+	-fx-text-fill: black;
+}

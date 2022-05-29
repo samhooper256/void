@@ -2,6 +2,7 @@ package game.feeders;
 
 import base.Updatable;
 import game.*;
+import game.feeders.data.FeederData;
 import utils.fx.*;
 
 public final class Feeder extends AbstractFeeder implements Updatable {

@@ -5,22 +5,26 @@ import java.math.BigInteger;
 import java.util.*;
 
 import game.feeders.*;
+import game.feeders.data.FeederData;
+import game.upgrades.Upgrade;
 
 public final class Ascension implements Serializable {
 
 	private static final long serialVersionUID = -8214211348207545572L;
 	
 	private final Save save;
+	private final Map<FeederTag, FeederData> feeders;
+	private final EnumSet<Upgrade> upgrades;
 	
 	private BigInteger mu;
-	private Map<FeederTag, FeederData> feeders;
 	
 	/** The ascension starts with zero {@link #mu()}.*/
 	public Ascension(Save save) {
+		this.save = save;
 		mu = BigInteger.ZERO;
 		feeders = new HashMap<>();
-		this.save = save;
-		feeders.put(FeederTag.MUD_SLINGER, new FeederData(FeederTag.MUD_SLINGER, 1));
+		feeders.put(FeederTag.SAND_SLINGER, FeederData.create(FeederTag.SAND_SLINGER));
+		upgrades = EnumSet.noneOf(Upgrade.class);
 	}
 	
 	/** Returns the current number of available (unspent) meaning units in this ascension. */
@@ -60,7 +64,7 @@ public final class Ascension implements Serializable {
 	public void initiate(FeederTag tag) {
 		if(!canInitiate(tag))
 			throw new IllegalStateException(String.format("Cannot initiate: %s", tag));
-		feeders.put(tag, new FeederData(tag));
+		feeders.put(tag, FeederData.create(tag));
 	}
 
 	public BigInteger initiationCost(FeederTag tag) {
@@ -73,6 +77,20 @@ public final class Ascension implements Serializable {
 	
 	public Collection<FeederData> getFeederData() {
 		return feeders.values();
+	}
+	
+	public boolean hasUpgrade(Upgrade upgrade) {
+		return upgrades.contains(upgrade);
+	}
+	
+	public boolean canPurchase(Upgrade upgrade) {
+		return upgrade.isPurchasable(save);
+	}
+	
+	public void purchaseUpgrade(Upgrade upgrade) {
+		if(canPurchase(upgrade))
+			throw new IllegalStateException(String.format("Cannot purchase upgrade: %s", upgrade));
+		upgrades.add(upgrade);
 	}
 	
 	public AscensionLog generateLog() {

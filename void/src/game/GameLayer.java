@@ -30,7 +30,7 @@ public final class GameLayer extends Pane implements UpdatablePane {
 		Nodes.setPrefSize(this, VoidScene.WIDTH, VoidScene.HEIGHT);
 		mu = new Label();
 		mu.getStyleClass().add("mu");
-		getChildren().add(mu);
+		getChildren().addAll(VoidLayer.get(), mu);
 		eouRemoves = new ArrayList<>();
 		eouAdds = new ArrayList<>();
 		eouActions = new ArrayList<>();

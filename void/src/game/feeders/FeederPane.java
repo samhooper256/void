@@ -1,5 +1,7 @@
 package game.feeders;
 
+import java.math.BigInteger;
+
 import game.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -9,17 +11,54 @@ import utils.fx.Backgrounds;
 /** Invisible by default. */
 public final class FeederPane extends StackPane {
 
-	private class Level1 extends Button {
+	private static class LevelButton extends Button {
+		
+		private static final String CSS = "level-button", GRAPHIC_CSS = "graphic", COST_CSS = "cost";
 		
 		final VBox graphic;
 		final Label cost;
 		
-		Level1() {
-			Label title = new Label("Level Up");
+		LevelButton() {
+			graphic = new VBox();
+			graphic.getStyleClass().add(GRAPHIC_CSS);
 			cost = new Label();
-			updateCost();
-			graphic = new VBox(title, cost);
+			cost.getStyleClass().add(COST_CSS);
 			setGraphic(graphic);
+			getStyleClass().add(CSS);
+		}
+		
+	}
+
+	private abstract static class BasicLevelButton extends LevelButton {
+
+		BasicLevelButton(String titleText) {
+			Label title = new Label(titleText);
+			updateCost();
+			graphic.getChildren().addAll(title, cost);
+			setFocusTraversable(false);
+		}
+		
+		abstract BigInteger getCost();
+		
+		void updateCost() {
+			cost.setText(Formatter.format(getCost()));
+		}
+		
+		private boolean isAffordable() {
+			return getCost().compareTo(Hub.mu()) <= 0;
+		}
+		
+		void update() {
+			updateCost();
+			setDisable(!isAffordable());
+		}
+		
+	}
+	
+	private class Level1 extends BasicLevelButton {
+		
+		Level1() {
+			super("Level Up");
 			setOnAction(ae -> {
 				GameLayer.get().addEOUAction(() -> {
 					feeder.data().levelUp();
@@ -28,36 +67,60 @@ public final class FeederPane extends StackPane {
 			});
 		}
 		
-		void update() {
-			updateCost();
-			setDisable(!isAffordable());
-		}
-		
-		private void updateCost() {
-			cost.setText(feeder().data().nextCost().toString());
-		}
-		
-		private boolean isAffordable() {
-			return feeder().data().nextCost().compareTo(Hub.mu()) <= 0;
+		@Override
+		BigInteger getCost() {
+			return feeder().data().nextCost();
 		}
 		
 	}
 	
-	private static final String CSS = "feeder-pane", NAME_AND_LEVEL_CSS = "name-and-level";
+	private class Level10 extends BasicLevelButton {
+		
+		Level10() {
+			super("Level 10x");
+			setOnAction(ae -> {
+				GameLayer.get().addEOUAction(() -> {
+					feeder.data().levelUp10();
+					GameLayer.get().updateMU();
+				});
+			});
+		}
+		
+		@Override
+		BigInteger getCost() {
+			return feeder().data().next10Cost();
+		}
+		
+	}
+
+	private static final String
+		CSS = "feeder-pane",
+		TITLE_BAR_CSS = "title-bar",
+		LEVEL_BOX_CSS = "level-box",
+		LEVEL_BOX_LAYER_1 = "layer-1";
 	
 	private final Feeder feeder;
-	private final VBox vBox;
-	private final Label nameAndLevel, mups;
-	private final Level1 level1;
+	private final VBox vBox, levelBox;
+	private final HBox titleBar, levelBoxLayer1;
+	private final Label nameAndLevel, mups, perThrow, delay;
+	private final BasicLevelButton level1, level10;
 	
 	public FeederPane(Feeder feeder) {
 		this.feeder = feeder;
 		nameAndLevel = new Label(feeder.tag().displayName() + ", Level " + feeder.data().level());
-		nameAndLevel.getStyleClass().add(NAME_AND_LEVEL_CSS);
 		mups = new Label();
-		updatemups();
+		perThrow = new Label();
+		delay = new Label();
+		titleBar = new HBox(nameAndLevel, mups);
+		titleBar.getStyleClass().add(TITLE_BAR_CSS);
 		level1 = new Level1();
-		vBox = new VBox(nameAndLevel, mups, level1);
+		level10 = new Level10();
+		levelBoxLayer1 = new HBox(level1, level10);
+		levelBoxLayer1.getStyleClass().add(LEVEL_BOX_LAYER_1);
+		levelBox = new VBox(levelBoxLayer1);
+		levelBox.getStyleClass().add(LEVEL_BOX_CSS);
+		update();
+		vBox = new VBox(titleBar, perThrow, delay, levelBox);
 		getChildren().add(vBox);
 		getStyleClass().add(CSS);
 		setVisible(false);
@@ -71,7 +134,10 @@ public final class FeederPane extends StackPane {
 	public void update() {
 		updateLevel();
 		updatemups();
+		updatePerThrow();
+		updateDelay();
 		level1.update();
+		level10.update();
 	}
 	
 	private void updateLevel() {
@@ -81,7 +147,15 @@ public final class FeederPane extends StackPane {
 	}
 
 	private void updatemups() {
-		mups.setText("MUPS: " + Formatter.format(feeder().data().mupsRounded()));
+		mups.setText("(" + Formatter.format(feeder().data().mupsRounded()) + " MUPS)");
+	}
+	
+	private void updatePerThrow() {
+		perThrow.setText("Per Throw: " + Formatter.format(feeder().data().mu()) + " MU");
+	}
+	
+	private void updateDelay() {
+		delay.setText(String.format("Delay: %.2f seconds", feeder().data().rate() * 1e-9));
 	}
 	
 }

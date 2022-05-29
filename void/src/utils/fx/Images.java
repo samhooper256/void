@@ -13,7 +13,8 @@ public final class Images {
 	public static final Image
 		FEEDER = get("feeder_temp.png"),
 		MUD_BALL = get("mudball.png"),
-		DEBUG_RIGHT_ARROW = get("debugrightarrow.png");
+		DEBUG_RIGHT_ARROW = get("debugrightarrow.png"),
+		THE_VOID = get("the_void.png");
 	
 	private Images() {
 		

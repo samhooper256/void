@@ -37,9 +37,13 @@
 }
 
 .feeder-pane {
-	-fx-padding: 6;
-	-fx-background-color: rgb(80, 80, 80);
-	-fx-background-radius: 4;
+	-fx-padding: 8;
+	-fx-background-color: rgb(120, 120, 120);
+	-fx-background-radius: 8;
+	-fx-border-insets: 2;
+	-fx-border-radius: 6;
+	-fx-border-width: 2;
+	-fx-border-color: #ffe975;
 }
 
 .feeder-pane .label {
@@ -47,6 +51,49 @@
 	-fx-text-fill: white;
 }
 
-.feeder-pane .name-and-level {
+.feeder-pane .title-bar {
+	-fx-spacing: 6;
+	-fx-padding: 0 0 2 0;
+}
+
+.feeder-pane .title-bar .label {
 	-fx-font: 18 "Georgia";
 }
+
+.feeder-pane .level-box {
+	-fx-padding: 4 0 0 0;	
+}
+
+.feeder-pane .level-box .layer-1 {
+	-fx-spacing: 4;	
+}
+
+.level-button {
+	-fx-alignment: center;
+	-fx-background-color: #32abe3;
+	-fx-border-width: 2;
+	-fx-border-color: #1d90c4;
+	-fx-border-radius: 1;
+}
+
+.level-button .graphic {
+	-fx-alignment: center;	
+}
+
+.level-button .graphic .label {
+	-fx-text-fill: gold;
+}
+
+.level-button .cost {
+	-fx-font-weight: bold;
+}
+
+.level-button:disabled {
+	-fx-background-color: blue;	
+}
+
+.level-button:hover {
+	-fx-background-color: #1db3c4;	
+	-fx-border-color: #1b919e;
+}
+

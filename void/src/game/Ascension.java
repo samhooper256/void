@@ -58,8 +58,9 @@ public final class Ascension implements Serializable {
 	
 	/** @throws IllegalStateException if this {@link Ascension} {@link #hasFeeder(FeederTag) has} the given feeder. */
 	public void initiate(FeederTag tag) {
-		if(hasFeeder(tag))
-			throw new IllegalStateException(String.format("Already have Feeder: %s", tag));
+		if(!canInitiate(tag))
+			throw new IllegalStateException(String.format("Cannot initiate: %s", tag));
+		feeders.put(tag, new FeederData(tag));
 	}
 
 	public BigInteger initiationCost(FeederTag tag) {

@@ -1,6 +1,6 @@
 package utils;
 
-import java.math.BigInteger;
+import java.math.*;
 
 public class BigNumbers {
 	
@@ -10,6 +10,10 @@ public class BigNumbers {
 	
 	public static BigInteger integer(String s) {
 		return new BigInteger(s);
+	}
+	
+	public static BigDecimal decimal(long num) {
+		return BigDecimal.valueOf(num);
 	}
 	
 	public static int digitCount(BigInteger bi) {

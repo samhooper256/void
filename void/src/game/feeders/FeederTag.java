@@ -14,8 +14,8 @@ import java.util.List;
 public enum FeederTag {
 	MUD_SLINGER("Bob", BigInteger.ZERO, BigDecimal.TEN, BigInteger.ONE, (long) 1e9, 700, CENTER_Y - FEEDER.getHeight(),
 			FEEDER, MUD_BALL),
-	STICK_THROWER("Mosh", BigNumbers.integer(1000), BigDecimal.TEN, BigInteger.ONE, (long) 1e9, 720, 300,
-			FEEDER, MUD_BALL);
+	STICK_THROWER("Mosh", BigNumbers.integer(1000), BigNumbers.decimal(1100), BigNumbers.integer(100), (long) 2e9, 720, 300,
+			FEEDER, STICK);
 	
 	private static final FeederTag[] VALUES = values();
 

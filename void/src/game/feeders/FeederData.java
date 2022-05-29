@@ -21,9 +21,9 @@ public final class FeederData implements Serializable {
 	
 	private BigInteger level;
 	
-	/** {@link #level()} is {@code 0}. */
+	/** {@link #level()} is {@code 1}. */
 	public FeederData(FeederTag tag) {
-		this(tag, 0);
+		this(tag, 1);
 	}
 	
 	public FeederData(FeederTag tag, long startingLevel) {

@@ -66,6 +66,14 @@ public final class GameLayer extends Pane implements UpdatablePane {
 		}
 	}
 	
+	public void initiate(UninitiatedFeeder uFeeder) {
+		getChildren().removeAll(uFeeder, uFeeder.pane());
+		FeederTag tag = uFeeder.tag();
+		Hub.ascension().initiate(tag);
+		Feeder feeder = new Feeder(Hub.ascension().getFeederData(tag));
+		getChildren().addAll(feeder, feeder.pane());
+	}
+	
 	/** Assumes the given {@link Projectile} has already been positioned properly. */
 	public void addProjectile(Projectile projectile) {
 		eouAdds.add(projectile);

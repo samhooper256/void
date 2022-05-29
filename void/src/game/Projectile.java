@@ -5,10 +5,12 @@ import java.math.BigInteger;
 import base.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import utils.RNG;
 import utils.fx.*;
 
 public class Projectile extends StackPane implements Updatable {
 
+	private static final double ROTATIONAL_VELOCITY = 45; //degrees per second
 	private static final double DEFAULT_VELOCITY = 200; //pixels per second
 	private static final double ACCELERATION = 100; //pixels per second per second
 	
@@ -35,10 +37,12 @@ public class Projectile extends StackPane implements Updatable {
 		this.velocity = velocity;
 		getChildren().add(rimage);
 		setMouseTransparent(true);
+		setRotate(RNG.doubleExclusive(360));
 	}
 	
 	@Override
 	public void update(long diff) {
+		//translational motion:
 		double angrad = Math.atan2(VoidScene.CENTER_Y - getCenterY(), VoidScene.CENTER_X - getCenterX());
 		double sec = diff * 1e-9;
 		velocity += ACCELERATION * sec;
@@ -47,6 +51,8 @@ public class Projectile extends StackPane implements Updatable {
 			GameLayer.get().reachedCenter(this);
 		else
 			setCenter(getCenterX() + xdist, getCenterY() + ydist);
+		//rotational motion:
+		setRotate(getRotate() + ROTATIONAL_VELOCITY * sec);
 	}
 	
 	public void setCenterX(double x) {

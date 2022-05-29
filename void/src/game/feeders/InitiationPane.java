@@ -11,6 +11,11 @@ public final class InitiationPane extends AbstractFeederPane {
 		
 		InitiateButton() {
 			super("Initiate");
+			setOnAction(ae -> {
+				GameLayer.get().addEOUAction(() -> {
+					GameLayer.get().initiate(uFeeder);
+				});
+			});
 		}
 		
 		@Override

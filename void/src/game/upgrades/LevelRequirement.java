@@ -2,7 +2,7 @@ package game.upgrades;
 
 import java.math.BigInteger;
 
-import game.Save;
+import game.*;
 import game.feeders.*;
 import game.feeders.data.FeederData;
 
@@ -34,6 +34,11 @@ public final class LevelRequirement implements UpgradeRequirement {
 		if(!save.ascension().hasFeeder(tag()))
 			return false;
 		return save.ascension().getFeederData(tag()).level().compareTo(minLevel()) >= 0;
+	}
+
+	@Override
+	public String displayString() {
+		return String.format("Requires level %s %s", Formatter.format(minLevel()), tag().displayName());
 	}
 	
 }

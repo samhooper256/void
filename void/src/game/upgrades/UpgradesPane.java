@@ -1,6 +1,7 @@
 package game.upgrades;
 
 import base.*;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -15,8 +16,11 @@ public final class UpgradesPane extends Pane implements Updatable {
 	
 	static final double Y = 100, DEST_X = VoidScene.CENTER_X + 180;
 	
-	private static final String CSS = "upgrades-pane", COLUMN_CSS = "upgrades-column";
-	private static final double WIDTH = .5 * VoidScene.WIDTH, HEIGHT = VoidScene.HEIGHT - 2 * Y;
+	private static final String CSS = "upgrades-pane", COLUMN_CSS = "upgrades-column"; //TODO upgrades-column is not used.
+	static final double
+		WIDTH = VoidScene.WIDTH - DEST_X,
+		HEIGHT = VoidScene.HEIGHT - 2 * Y,
+		PADDING = 20;
 	private static final long TRANSITION_DURATION = (long) 1e9, UPDATE_COOLDOWN = (long) 1e9;
 	private static final Interpolation.Interpolator INTERPOLATOR = Interpolation::square;
 	private static final UpgradesPane INSTANCE = new UpgradesPane();
@@ -34,11 +38,11 @@ public final class UpgradesPane extends Pane implements Updatable {
 		Nodes.setAllSizes(this, WIDTH, HEIGHT);
 		upgradeColumn = new VBox();
 		upgradeColumn.getStyleClass().add(COLUMN_CSS);
+		upgradeColumn.setPadding(new Insets(PADDING)); //not set in CSS because the value is needed elsewhere.
 		for(Upgrade u : Upgrade.values())
 			upgradeColumn.getChildren().add(new UpgradeDisplay(u));
 		getChildren().add(upgradeColumn);
 		getStyleClass().add(CSS);
-		setBackground(Backgrounds.of(Color.BROWN));
 		state = State.OFF;
 	}
 

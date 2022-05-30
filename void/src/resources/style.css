@@ -2,6 +2,10 @@
 	src: url("fonts/CrimsonPro-VariableFont_wght.ttf"); /* Crimson Pro ExtraLight */
 }
 
+.scaled-pane {
+	-fx-background-color: #ffce73;
+}
+
 .mu-display {
 	-fx-font: 72 "Crimson Pro ExtraLight";
 }
@@ -46,12 +50,12 @@
 
 .feeder-pane {
 	-fx-padding: 8;
-	-fx-background-color: rgb(120, 120, 120);
+	-fx-background-color: rgb(100, 100, 100);
 	-fx-background-radius: 8;
 	-fx-border-insets: 2;
 	-fx-border-radius: 6;
 	-fx-border-width: 2;
-	-fx-border-color: #ffe975;
+	-fx-border-color: #ffbb29;
 }
 
 .feeder-pane .label {
@@ -105,8 +109,19 @@
 	-fx-border-color: #1b919e;
 }
 
-.upgrades-pane .upgrades-column {
-	-fx-padding: 20;
+.upgrades-pane {
+	-fx-background-color: rgb(100, 100, 100);
+	-fx-border-width: 2;
+	-fx-border-color: #ffbb29;
+}
+
+.upgrade-display {
+	-fx-background-color: orange;
+	-fx-background-radius: 4;	
+}
+
+.upgrade-display .outer-hbox {
+	-fx-padding: 4 4 4 6;
 }
 
 .upgrade-display .outer-hbox,

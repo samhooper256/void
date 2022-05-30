@@ -6,12 +6,12 @@ import game.*;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
 import utils.fx.*;
 
 public final class ScaledPane extends Pane implements UpdatablePane, KeyListenerPane {
 
+	private static final String CSS = "scaled-pane";
 	private static final ScaledPane INSTANCE = new ScaledPane();
 	
 	public static ScaledPane get() {
@@ -23,6 +23,7 @@ public final class ScaledPane extends Pane implements UpdatablePane, KeyListener
 	
 	private ScaledPane() {
 		scale = new Scale();
+		getStyleClass().add(CSS);
 		parentSizeListener = (_1, _2, _3) -> {
 			if(getParent() instanceof Region r) {
 				double width = r.getWidth(), height = r.getHeight();
@@ -31,7 +32,6 @@ public final class ScaledPane extends Pane implements UpdatablePane, KeyListener
 			}
 		};
 		getTransforms().add(scale);
-		setBackground(Backgrounds.of(Color.PINK));
 		Nodes.setPrefSize(this, VoidScene.WIDTH, VoidScene.HEIGHT);
 	}
 	

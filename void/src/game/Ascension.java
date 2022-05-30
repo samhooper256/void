@@ -6,7 +6,7 @@ import java.util.*;
 
 import game.feeders.*;
 import game.feeders.data.FeederData;
-import game.upgrades.Upgrade;
+import game.upgrades.*;
 
 public final class Ascension implements Serializable {
 
@@ -96,6 +96,10 @@ public final class Ascension implements Serializable {
 	
 	public BigInteger trueCostOf(Upgrade upgrade) {
 		return upgrade.getTrueCost(save);
+	}
+	
+	public boolean meets(UpgradeRequirement requirement) {
+		return requirement.test(save);
 	}
 	
 	public AscensionLog generateLog() {

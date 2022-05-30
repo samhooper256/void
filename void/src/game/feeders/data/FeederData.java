@@ -13,7 +13,9 @@ public abstract class FeederData implements Serializable {
 	private static final double
 		COST_INCREASE_FACTOR = 1.1,
 		BUY_10_MULTIPLIER = (1 - Math.pow(COST_INCREASE_FACTOR, 10)) / (1 - 1.1); //partial sum of geometric series.
-	private static final MathContext NEAREST_INTEGER = new MathContext(0);
+	private static final MathContext
+		NEAREST_INTEGER = new MathContext(0),
+		INTERMEDIATE_CONTEXT = MathContext.DECIMAL128;
 	private static final BigDecimal E9 = BigDecimal.valueOf(1_000_000_000);
 	
 	public static FeederData create(FeederTag tag) {
@@ -86,7 +88,9 @@ public abstract class FeederData implements Serializable {
 	}
 	
 	public BigInteger mupsRounded() {
-		return new BigDecimal(mu()).divide(new BigDecimal(rate())).multiply(E9, NEAREST_INTEGER).toBigInteger();
+		return new BigDecimal(mu())
+				.divide(new BigDecimal(rate()), INTERMEDIATE_CONTEXT)
+				.multiply(E9, NEAREST_INTEGER).toBigInteger();
 	}
 	
 }

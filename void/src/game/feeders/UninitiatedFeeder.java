@@ -26,4 +26,9 @@ public final class UninitiatedFeeder extends AbstractFeeder {
 		return pane;
 	}
 	
+	@Override
+	public String toString() {
+		return String.format("UninitiatedFeeder[tag=%s, pane=%s]", tag, pane);
+	}
+	
 }

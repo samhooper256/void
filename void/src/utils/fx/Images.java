@@ -15,6 +15,7 @@ public final class Images {
 		UNINITIATED_FEEDER = get("uninitiated_feeder_temp.png"),
 		SAND_BALL = get("sand_ball.png"),
 		STICK = get("stick.png"),
+		ROCK = get("rock.png"),
 		DEBUG_RIGHT_ARROW = get("debugrightarrow.png"),
 		UPGRADES_ARROW = get("upgrades_arrow.png"),
 		THE_VOID = get("the_void.png");

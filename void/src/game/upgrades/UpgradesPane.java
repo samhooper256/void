@@ -4,9 +4,8 @@ import base.*;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import utils.Interpolation;
-import utils.fx.*;
+import utils.fx.Nodes;
 
 public final class UpgradesPane extends Pane implements Updatable {
 

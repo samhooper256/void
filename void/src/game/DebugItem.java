@@ -33,4 +33,11 @@ interface DebugItem {
 		traverseChildren(action);
 	}
 	
+	/** Default implementation is equivalent to {@code asPane().setVisible(true)}. This method may be overridden
+	 * to provide some functionality to be executed every time this {@link DebugItem} is made visible. Overriding
+	 * methods should call this default implementation. */
+	default void becomeVisible() {
+		asPane().setVisible(true);
+	}
+	
 }

@@ -19,7 +19,7 @@ public final class Formatter {
 			18, // 1.000Q
 			21, // 1.000s
 			24, // 1.000S
-			27, // 1.000o
+			27, // 1.000c - can't use o for octillion because it looks too much like zero.
 			30, // 1.000n
 			33, // 1.000d
 			36, // 1.000u
@@ -32,7 +32,7 @@ public final class Formatter {
 			.mapToObj(i -> new BigInteger("1" + "0".repeat(i)))
 			.toArray(BigInteger[]::new);
 	
-	private static final String[] SUFFIXES = {"", "k", "m", "b", "t", "q", "Q", "s", "S", "o", "n", "d", "u", "D", "T"};
+	private static final String[] SUFFIXES = {"", "k", "m", "b", "t", "q", "Q", "s", "S", "c", "n", "d", "u", "D", "T"};
 	
 	private Formatter() {
 		

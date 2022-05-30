@@ -18,6 +18,11 @@ public final class UpgradeDisplay extends Pane {
 	public UpgradeDisplay(Upgrade upgrade) {
 		this.upgrade = upgrade;
 		buy = new Button("Buy");
+		buy.setFocusTraversable(false);
+		buy.setOnAction(ae -> {
+			if(canPurchase())
+				GameLayer.get().buyUpgrade(this);
+		});
 		name = new Label(upgrade.displayName());
 		cost = new Label(); //update will get called before the user ever sees this UpgradeDisplay, filling this in.
 		hBox = new HBox(buy, name, cost);
@@ -28,8 +33,12 @@ public final class UpgradeDisplay extends Pane {
 	}
 
 	public void update() {
-		buy.setDisable(!Hub.save().ascension().canPurchase(upgrade()));
+		buy.setDisable(!canPurchase());
 		cost.setText("(" + Formatter.format(Hub.save().ascension().trueCostOf(upgrade())) +")");
+	}
+
+	private boolean canPurchase() {
+		return Hub.save().ascension().canPurchase(upgrade());
 	}
 	
 	public Upgrade upgrade() {

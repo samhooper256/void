@@ -98,6 +98,12 @@ public final class GameLayer extends Pane implements UpdatablePane {
 		updateMU();
 	}
 	
+	public void buyUpgrade(UpgradeDisplay ud) {
+		Hub.save().ascension().purchaseUpgrade(ud.upgrade());
+		updateMU();
+		ud.update();
+	}
+	
 	public void setupSave(Save save) {
 		this.save = save;
 		updateMU();

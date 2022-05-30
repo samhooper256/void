@@ -10,9 +10,9 @@ import javafx.scene.layout.*;
 import utils.Parsing;
 import utils.fx.*;
 
-final class DebugMenu extends Pane implements KeyListenerPane {
+final class DebugMenu extends Pane implements KeyListener {
 	
-	private static final class DebugVBox extends VBox implements DebugItem {
+	private static final class DebugVBox extends VBox implements DebugItem, KeyListener {
 		
 		private static final String CSS = "debug-vbox";
 		private static final double MIN_WIDTH = 120;
@@ -30,6 +30,13 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 			for(Node child : getChildren())
 				if(child instanceof ParentItem pi)
 					pi.traverseChildren(action);
+		}
+		
+		@Override
+		public void handle(KeyEvent event) {
+			for(Node child : getChildren())
+				if(child instanceof KeyListener ki)
+					ki.handle(event);
 		}
 		
 	}
@@ -73,9 +80,8 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 			getChildren().add(new ResizableImage(Images.DEBUG_RIGHT_ARROW));
 			addEventHandler(MouseEvent.MOUSE_ENTERED, me -> {
 				DebugMenu.get().hideChildrenOfTop();
-				Pane p = child.asPane();
-				Nodes.setLayout(p, getLayoutX() + getWidth(), getLayoutY());
-				p.setVisible(true);
+				Nodes.setLayout(child.asPane(), getLayoutX() + getWidth(), getLayoutY());
+				child.becomeVisible();
 			});
 		}
 		
@@ -86,7 +92,7 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 
 		@Override
 		public void handle(KeyEvent event) {
-			if(child instanceof KeyListener kl)
+			if(child.asPane().isVisible() && child instanceof KeyListener kl)
 				kl.handle(event);
 		}
 		
@@ -129,7 +135,7 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 
 		@Override
 		public void handle(KeyEvent event) {
-			if(event.getCode() == KeyCode.ENTER)
+			if(event.getEventType() == KeyEvent.KEY_PRESSED && event.getCode() == KeyCode.ENTER)
 				spawnAction();
 			else
 				field.handle(event);
@@ -138,10 +144,15 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 		private void spawnAction() {
 			String text = field.getText();
 			if(Parsing.isInteger(text)) {
-				DebugMenu.get().setVisible(false);
 				MouseEvent me = DebugMenu.get().cause;
 				GameLayer.get().addProjectile(new Projectile(Parsing.parseInteger(text)), me.getX(), me.getY());
 			}
+		}
+		
+		@Override
+		public void becomeVisible() {
+			field.requestFocus();
+			super.becomeVisible();
 		}
 		
 	}
@@ -174,6 +185,11 @@ final class DebugMenu extends Pane implements KeyListenerPane {
 
 	private void hideChildrenOfTop() {
 		topItem.traverseChildren(di -> di.asPane().setVisible(false));
+	}
+	
+	@Override
+	public void handle(KeyEvent event) {
+		topItem.handle(event);
 	}
 	
 }

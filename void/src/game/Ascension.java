@@ -88,9 +88,10 @@ public final class Ascension implements Serializable {
 	}
 	
 	public void purchaseUpgrade(Upgrade upgrade) {
-		if(canPurchase(upgrade))
+		if(!canPurchase(upgrade))
 			throw new IllegalStateException(String.format("Cannot purchase upgrade: %s", upgrade));
 		upgrades.add(upgrade);
+		lose(trueCostOf(upgrade));
 	}
 	
 	public BigInteger trueCostOf(Upgrade upgrade) {

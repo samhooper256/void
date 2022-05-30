@@ -3,6 +3,7 @@ package game;
 import java.util.*;
 
 import base.*;
+import game.abilities.AbilityBar;
 import game.feeders.*;
 import game.feeders.data.FeederData;
 import game.upgrades.*;
@@ -36,7 +37,8 @@ public final class GameLayer extends Pane implements UpdatablePane {
 		muDisplay.layoutXProperty().bind(muDisplay.widthProperty().multiply(-.5).add(VoidScene.CENTER_X));
 		muText.layoutXProperty().bind(muText.widthProperty().multiply(-.5).add(VoidScene.CENTER_X));
 		muText.setLayoutY(MU_TEXT_Y);
-		getChildren().addAll(VoidLayer.get(), muDisplay, muText, UpgradesPane.get(), UpgradesTab.get());
+		getChildren().addAll(VoidLayer.get(), muDisplay, muText, AbilityBar.get(),
+				UpgradesPane.get(), UpgradesTab.get());
 		eouRemoves = new ArrayList<>();
 		eouAdds = new ArrayList<>();
 		eouActions = new ArrayList<>();

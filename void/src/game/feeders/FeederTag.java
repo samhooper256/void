@@ -15,11 +15,11 @@ import utils.BigNumbers;
 import utils.fx.Images;
 
 public enum FeederTag {
-	SAND_SLINGER("Bob", BigInteger.ZERO, BigDecimal.TEN, BigInteger.ONE, (long) 1e9, 700, CENTER_Y,
+	SAND_SLINGER("Mosh", BigInteger.ZERO, BigDecimal.TEN, BigInteger.ONE, (long) 1e9, 700, CENTER_Y,
 			FEEDER, SAND_BALL, SandSlinger::new),
-	STICK_THROWER("Bart", BigNumbers.integer(1000), BigNumbers.decimal(1100), BigNumbers.integer(100), (long) 2e9, 720, 400,
+	STICK_THROWER("Laurette", BigNumbers.integer(1000), BigNumbers.decimal(1100), BigNumbers.integer(100), (long) 2e9, 720, 400,
 			FEEDER, STICK, StickThrower::new),
-	ROCK_THROWER("Lauretta", BigNumbers.integer(500_000), BigNumbers.decimal(550_000), BigNumbers.integer(2500), (long) 3e9, 720,
+	ROCK_THROWER("Brock", BigNumbers.integer(500_000), BigNumbers.decimal(550_000), BigNumbers.integer(2500), (long) 3e9, 720,
 			VoidScene.HEIGHT - 400, FEEDER, ROCK, RockThrower::new);
 	
 	private static final FeederTag[] VALUES = values();

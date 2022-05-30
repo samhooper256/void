@@ -147,3 +147,12 @@
 	-fx-font: 18 "Georgia";
 	-fx-text-fill: black;
 }
+
+.ability-bar {
+	-fx-background-color: rgb(100, 100, 100);
+}
+
+.ability-bar .not-unlocked-yet {
+	-fx-text-fill: white;
+	-fx-font: 48 "Georgia";
+}

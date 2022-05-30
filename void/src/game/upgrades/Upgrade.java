@@ -3,13 +3,16 @@ package game.upgrades;
 import java.math.BigInteger;
 
 import game.Save;
+import game.feeders.FeederTag;
 import utils.BigNumbers;
 
 /** Instances of this {@link Upgrade} enum describe upgrades the player can buy. Instances describe the
  * {@link #displayName()}, {@link #baseCost()}, and {@link UpgradeRequirement requirements} of an upgrade. Instances
  * <em>do not</em> describe what the upgrade does. */
 public enum Upgrade {
-	SANDIER_SAND("Sandier Sand", "Sand balls are twice as meaningful.", BigNumbers.integer(1000));
+	//Descriptions should be punctuated.
+	SANDIER_SAND("Sandier Sand", "Sand is twice as meaningful.", BigNumbers.integer(750),
+			LevelRequirement.of(FeederTag.SAND_SLINGER, BigNumbers.integer(25)));
 	
 	private final String displayName, description;
 	private final BigInteger baseCost;

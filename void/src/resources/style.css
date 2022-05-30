@@ -109,9 +109,14 @@
 	-fx-padding: 20;
 }
 
-.upgrade-display .hbox {
+.upgrade-display .outer-hbox,
+.upgrade-display .inner-hbox {
 	-fx-alignment: center-left;
 	-fx-spacing: 8;	
+}
+
+.upgrade-display .inner-hbox .label {
+	-fx-font-weight: bold;	
 }
 
 .upgrade-display .button {
